@@ -1,4 +1,5 @@
 import json
+import pickle
 
 import pygame
 import sys
@@ -193,15 +194,25 @@ class Brush:
         mask = mask.astype(bool)
         cropped_mask = mask[box_bottom:box_top,box_left:box_right]
 
-        effect_points = [ [point[1]-box_top, point[0] - box_left] for point in path]
-        effect_image = cropped_image.tolist()
-        effect_params = json.dumps({"image": effect_image, "mask":cropped_mask.tolist(),"points": effect_points})
+        color = pygame.Color(self.properties["Color"].value)
+        color = [color.r,color.g,color.b]
 
+        effect_params = {"Image": cropped_image.tolist(),
+                         "Mask":cropped_mask.tolist(),
+                         "Points": [[point[1]-box_top, point[0] - box_left] for point in path],
+                         "Color": color}
+        effect_id = "0"
+
+        with open("temp/parameters_"+effect_id+".pkl", 'wb') as f:
+            pickle.dump(effect_params, f)
 
         effect_path = "effects/" + self.properties["Effect"].value
-        result = subprocess.run(['python', effect_path,effect_params], capture_output=True, text=True)
-        updated_image = np.array(json.loads(result.stdout))
+        subprocess.run(['python', effect_path,effect_id], capture_output=True, text=True)
 
+        with open("temp/image_"+effect_id+".pkl", 'rb') as f:
+            updated_image = pickle.load(f)
+
+        #Apply mask to original image
         image_array[mask] = updated_image[cropped_mask]
 
         updated_image_pil = Image.fromarray(np.dstack((image_array,alpha_array)), mode="RGBA")
@@ -225,7 +236,9 @@ class Brush:
 
         # Draw the path as lines
         if len(self.brush_path) > 1:
-            pygame.draw.lines(screen, color, False, self.brush_path, radius)
+            pygame.draw.lines(screen, color, False, self.brush_path, 2*radius)
+        elif len(self.brush_path) == 1:
+            pygame.draw.circle(screen, color, self.brush_path[0], radius)
 
         pygame.draw.circle(screen, color, mouse_pos, radius)
 
@@ -304,7 +317,7 @@ class App:
             Property(PROPERTY_MARGIN * 3 + PROPERTY_WIDTH * 2, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "Strength", "0.5"),
             Property(PROPERTY_MARGIN * 4 + PROPERTY_WIDTH * 3, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "File", "test.png"),
             Property(PROPERTY_MARGIN * 5 + PROPERTY_WIDTH * 4, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "Effect",
-                     "RemoveAlpha.py"),
+                     "Basic.py"),
             Property(PROPERTY_MARGIN * 6 + PROPERTY_WIDTH * 5, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "Active", True, toggle=True)
         ]
 
