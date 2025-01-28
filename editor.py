@@ -1,247 +1,15 @@
 import json
 import pickle
-
 import pygame
 import sys
-import numpy as np
-import subprocess
-from PIL import Image
+from config import *
+from utils import *
+from brush import Brush
 
 # Initialize pygame
 pygame.init()
 
-# Screen dimensions
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 600
-
-# Colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GRAY = (200, 200, 200)
-
-# Property dimensions
-PROPERTY_WIDTH = 150
-PROPERTY_HEIGHT = 30
-PROPERTY_MARGIN = 10
-PROPERTY_CORNER_RADIUS = 10
-FONT = pygame.font.Font(None, 24)
-
-
-def apply_mask(array, mask):
-    # Validate array dimensions
-    if array.ndim != 3 or array.shape[-1] != 4:
-        raise ValueError("The input array must have 3 dimensions, and the last dimension must be of size 4.")
-
-    # Validate mask dimensions
-    if mask.shape != array.shape[:2]:
-        raise ValueError("The mask must have the same shape as the first two dimensions of the array.")
-
-    # Set the last value to 0 where the mask is False
-    array[~mask, -1] = 0  # Modify the last value directly
-
-    return array
-
-
-
-def interpolate_points(points, num_points):
-    # List to store the resulting interpolated points
-    interpolated = []
-
-    # Calculate the total number of segments between points
-    total_segments = len(points) - 1
-
-    # Total number of points to generate
-    total_points = num_points
-
-    # Generate the points
-    for i in range(total_segments):
-        x1, y1 = points[i]
-        x2, y2 = points[i + 1]
-
-        # Calculate the number of points between this pair of points
-        points_in_segment = total_points // total_segments
-        for j in range(points_in_segment):
-            t = j / points_in_segment
-            x = x1 + (x2 - x1) * t
-            y = y1 + (y2 - y1) * t
-            interpolated.append((x, y))
-
-    # Add the last point
-    interpolated.append(points[-1])
-
-    # If we have fewer than num_points (due to division rounding), add more points
-    while len(interpolated) < total_points:
-        interpolated.append(points[-1])
-
-    return interpolated
-
-
-def apply_circle(mask, x, y, radius):
-    # Get the shape of the mask
-    height, width = mask.shape
-    cx = int(x)
-    cy = int(y)
-    r = int(radius)
-
-    # Loop over the bounding box around the center (cx, cy)
-    for x in range(max(0, cx - r), min(width, cx + r + 1)):
-        for y in range(max(0, cy - r), min(height, cy + r + 1)):
-            # Check if the point (x, y) is within the circle
-            if (x - cx) ** 2 + (y - cy) ** 2 <= r ** 2:
-                mask[y,x] = 1  # Set the point to 1
-    return mask
-
-
-def rescale_coordinates(surface_rect, coords):
-    # Get the width and height of the surface
-    surface_width = surface_rect.width
-    surface_height = surface_rect.height
-
-    if isinstance(coords, tuple):
-        rescaled_x = max(0, min(surface_width, coords[0] - surface_rect.x))
-        rescaled_y = max(0, min(surface_height, coords[1] - surface_rect.y))
-
-        return rescaled_x, rescaled_y
-
-    elif isinstance(coords, list):
-        return [rescale_coordinates(surface_rect,crd) for crd in coords]
-
-
-
-class Brush:
-    def __init__(self, *properties):
-        self.properties = {property.label: property for property in properties}
-        self.brush_path = []
-        self.box = None
-        self.image = None
-        self.image_rect = None
-
-    def update_brush(self):
-        if not self.properties["Active"].value:
-            self.brush_path = []
-            self.box = None
-
-        # Load image if File property is set
-        file_path = self.properties["File"].value
-        if file_path:
-            try:
-                self.image = pygame.image.load("images/"+file_path)
-                image_ratio = self.image.get_width() / self.image.get_height()
-                max_width = SCREEN_WIDTH
-                max_height = SCREEN_HEIGHT - (PROPERTY_HEIGHT + PROPERTY_MARGIN * 2)
-
-                if max_width / max_height > image_ratio:
-                    new_height = max_height
-                    new_width = int(new_height * image_ratio)
-                else:
-                    new_width = max_width
-                    new_height = int(new_width / image_ratio)
-
-                self.image = pygame.transform.scale(self.image, (new_width, new_height))
-                self.image_rect = self.image.get_rect(center=(SCREEN_WIDTH // 2, (SCREEN_HEIGHT + PROPERTY_HEIGHT) // 2))
-            except pygame.error:
-                print(f"Unable to load image: {file_path}")
-                self.image = None
-                self.image_rect = None
-
-    def handle_event(self, event):
-        if self.properties["Active"].value and self.image and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            self.brush_path.append((mouse_x, mouse_y))
-            self.update_box()
-            return True
-        return False
-
-    def update_box(self):
-        if not self.brush_path:
-            self.box = None
-            return
-
-        radius = int(self.properties["Radius"].value)
-        x_coords = [p[0] for p in self.brush_path]
-        y_coords = [p[1] for p in self.brush_path]
-        self.box = (
-            min(x_coords) - radius, min(y_coords) - radius,
-            max(x_coords) + radius + 1, max(y_coords) + radius + 1
-        )
-
-    def run_brush(self):
-        if not self.image or not self.box:
-            print("No valid image or box to process.")
-            return
-
-        # Extract the portion of the image within the bounding box
-        box_left, box_bottom, box_right, box_top = self.box
-        box_left, box_bottom = rescale_coordinates(self.image_rect, (box_left, box_bottom))
-        box_right, box_top = rescale_coordinates(self.image_rect, (box_right, box_top))
-
-        # Convert the surface to an array for manipulation
-        image_array = pygame.surfarray.pixels3d(self.image).swapaxes(0, 1)
-        alpha_array = pygame.surfarray.pixels_alpha(self.image).swapaxes(0, 1)
-
-        # Crop the image region
-        cropped_image = image_array[box_bottom:box_top,box_left:box_right]
-
-        # Create a mask to apply radius-based transparency
-        radius = int(self.properties["Radius"].value)
-        mask = np.zeros(alpha_array.shape, dtype=np.uint8)
-        path = rescale_coordinates(self.image_rect, self.brush_path)
-
-        for x,y in interpolate_points(path,100):
-            mask = apply_circle(mask,x,y,radius)
-
-        # Apply the mask to create transparency
-        mask = mask.astype(bool)
-        cropped_mask = mask[box_bottom:box_top,box_left:box_right]
-
-        color = pygame.Color(self.properties["Color"].value)
-        color = [color.r,color.g,color.b]
-
-        effect_params = {"Image": cropped_image.tolist(),
-                         "Mask":cropped_mask.tolist(),
-                         "Points": [[point[1]-box_top, point[0] - box_left] for point in path],
-                         "Color": color}
-        effect_id = "0"
-
-        with open("temp/parameters_"+effect_id+".pkl", 'wb') as f:
-            pickle.dump(effect_params, f)
-
-        effect_path = "effects/" + self.properties["Effect"].value
-        subprocess.run(['python', effect_path,effect_id], capture_output=True, text=True)
-
-        with open("temp/image_"+effect_id+".pkl", 'rb') as f:
-            updated_image = pickle.load(f)
-
-        #Apply mask to original image
-        image_array[mask] = updated_image[cropped_mask]
-
-        updated_image_pil = Image.fromarray(np.dstack((image_array,alpha_array)), mode="RGBA")
-
-        self.properties["File"].value = "updated_"+self.properties["File"].value
-        updated_image_pil.save("images/"+self.properties["File"].value)
-
-        # Reset the brush
-        self.properties["Active"].value = False
-        self.update_brush()
-
-    def draw(self, screen, mouse_pos):
-        # Draw the image if it exists (after the brush path)
-        if self.image and self.image_rect:
-            screen.blit(self.image, self.image_rect.topleft)
-
-        # Draw the brush cursor
-        color = pygame.Color(self.properties["Color"].value)
-        radius = int(self.properties["Radius"].value)
-        color.a = int(float(self.properties["Strength"].value) * 255)
-
-        # Draw the path as lines
-        if len(self.brush_path) > 1:
-            pygame.draw.lines(screen, color, False, self.brush_path, 2*radius)
-        elif len(self.brush_path) == 1:
-            pygame.draw.circle(screen, color, self.brush_path[0], radius)
-
-        pygame.draw.circle(screen, color, mouse_pos, radius)
-
+FONT = pygame.font.Font(None, FONT_SIZE)
 
 class Property:
     def __init__(self, x, y, width, height, label, value, toggle=False):
@@ -300,7 +68,7 @@ class Property:
 
             pygame.display.flip()
 
-        pygame.display.set_caption("Brush Editor")
+        #pygame.display.set_caption("Brush Editor")
         return user_input
 
 class App:
@@ -315,7 +83,7 @@ class App:
             Property(PROPERTY_MARGIN, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "Color", "white"),
             Property(PROPERTY_MARGIN * 2 + PROPERTY_WIDTH, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "Radius", "10"),
             Property(PROPERTY_MARGIN * 3 + PROPERTY_WIDTH * 2, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "Strength", "0.5"),
-            Property(PROPERTY_MARGIN * 4 + PROPERTY_WIDTH * 3, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "File", "test.png"),
+            Property(PROPERTY_MARGIN * 4 + PROPERTY_WIDTH * 3, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "File", ""),
             Property(PROPERTY_MARGIN * 5 + PROPERTY_WIDTH * 4, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "Effect",
                      "Basic.py"),
             Property(PROPERTY_MARGIN * 6 + PROPERTY_WIDTH * 5, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT, "Active", True, toggle=True)

@@ -1,0 +1,79 @@
+
+def apply_mask(array, mask):
+    # Validate array dimensions
+    if array.ndim != 3 or array.shape[-1] != 4:
+        raise ValueError("The input array must have 3 dimensions, and the last dimension must be of size 4.")
+
+    # Validate mask dimensions
+    if mask.shape != array.shape[:2]:
+        raise ValueError("The mask must have the same shape as the first two dimensions of the array.")
+
+    # Set the last value to 0 where the mask is False
+    array[~mask, -1] = 0  # Modify the last value directly
+
+    return array
+
+
+
+def interpolate_points(points, num_points):
+    # List to store the resulting interpolated points
+    interpolated = []
+
+    # Calculate the total number of segments between points
+    total_segments = len(points) - 1
+
+    # Total number of points to generate
+    total_points = num_points
+
+    # Generate the points
+    for i in range(total_segments):
+        x1, y1 = points[i]
+        x2, y2 = points[i + 1]
+
+        # Calculate the number of points between this pair of points
+        points_in_segment = total_points // total_segments
+        for j in range(points_in_segment):
+            t = j / points_in_segment
+            x = x1 + (x2 - x1) * t
+            y = y1 + (y2 - y1) * t
+            interpolated.append((x, y))
+
+    # Add the last point
+    interpolated.append(points[-1])
+
+    # If we have fewer than num_points (due to division rounding), add more points
+    while len(interpolated) < total_points:
+        interpolated.append(points[-1])
+
+    return interpolated
+
+
+def apply_circle(mask, x, y, radius):
+    # Get the shape of the mask
+    height, width = mask.shape
+    cx = int(x)
+    cy = int(y)
+    r = int(radius)
+
+    # Loop over the bounding box around the center (cx, cy)
+    for x in range(max(0, cx - r), min(width, cx + r + 1)):
+        for y in range(max(0, cy - r), min(height, cy + r + 1)):
+            # Check if the point (x, y) is within the circle
+            if (x - cx) ** 2 + (y - cy) ** 2 <= r ** 2:
+                mask[y,x] = 1  # Set the point to 1
+    return mask
+
+
+def rescale_coordinates(surface_rect, coords):
+    # Get the width and height of the surface
+    surface_width = surface_rect.width
+    surface_height = surface_rect.height
+
+    if isinstance(coords, tuple):
+        rescaled_x = max(0, min(surface_width, coords[0] - surface_rect.x))
+        rescaled_y = max(0, min(surface_height, coords[1] - surface_rect.y))
+
+        return rescaled_x, rescaled_y
+
+    elif isinstance(coords, list):
+        return [rescale_coordinates(surface_rect,crd) for crd in coords]

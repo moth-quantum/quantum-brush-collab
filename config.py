@@ -1,0 +1,18 @@
+import pygame
+
+# Screen dimensions
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 600
+
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GRAY = (200, 200, 200)
+
+# Property dimensions
+PROPERTY_WIDTH = 150
+PROPERTY_HEIGHT = 30
+PROPERTY_MARGIN = 10
+PROPERTY_CORNER_RADIUS = 10
+
+FONT_SIZE = 24

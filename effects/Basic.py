@@ -13,17 +13,14 @@ def main():
     with open("temp/parameters_" + effect_id + ".pkl", 'rb') as f:
         params = pickle.load(f)
 
-    try:
-        image = np.array(params["Image"])
-        color = params["Color"]
-        image[:,:] = np.array(color)
 
-        with open("temp/image_"+effect_id+".pkl", 'wb') as f:
-            pickle.dump(image, f)
+    image = np.array(params["Image"])
+    color = params["Color"]
+    image[:,:] = np.array(color)
 
-    except json.JSONDecodeError:
-        print("Invalid dictionary format. Please provide a valid JSON string.")
-        sys.exit(1)
+    with open("temp/image_"+effect_id+".pkl", 'wb') as f:
+        pickle.dump(image, f)
+
 
 
 if __name__ == "__main__":
