@@ -8,7 +8,7 @@ from utils import *
 from PIL import Image
 
 #List of brush-specific requirements
-REQUIREMENTS = ["Status","Color","Radius"]
+REQUIREMENTS = ["Status","Radius"]
 
 class Brush:
     def __init__(self, *properties):
@@ -94,7 +94,7 @@ class Brush:
         updated_image_pil = Image.fromarray(np.dstack((image_array,alpha_array)), mode="RGBA")
 
         canvas.file.value = "up_"+canvas.file.value
-        updated_image_pil.save("images/"+canvas.file.value)
+        updated_image_pil.save("images/"+canvas.file.value,format="png")
         canvas.update_image()
 
         # Reset the brush
@@ -103,7 +103,7 @@ class Brush:
 
     def draw(self, screen, mouse_pos):
         # Draw the brush cursor
-        color = pygame.Color(self.properties["Color"].value)
+        color = pygame.Color("white")
         radius = int(self.properties["Radius"].value)
 
         # Draw the path as lines

@@ -4,6 +4,9 @@ import mixbox
 import pygame
 from mixbox import rgb_to_latent, latent_to_rgb
 from effects.BaseEffect import BaseEffect
+import sys
+# caution: path[0] is reserved for script path (or '' in REPL)
+import quantumblur as qb
 
 #List of effect-specific requirements
 REQUIREMENTS = ["Image","Color","Strength"]
@@ -35,6 +38,42 @@ def extract_weight(lcolor1, lcolor2):
     return t
 
 
+def partial_x(qc, fraction):
+    for j in range(qc.num_qubits):
+        qc.rx(np.pi * fraction, j)
+
+def partial_x(qc, fraction):
+    for j in range(qc.num_qubits):
+        qc.rx(np.pi * fraction, j)
+
+def get_size(height):
+    """
+    Determines the size of the grid for the given height map.
+    """
+    Lx = 0
+    Ly = 0
+    for (x,y) in height:
+        Lx = max(x+1,Lx)
+        Ly = max(y+1,Ly)
+    return Lx,Ly
+
+
+def array2height(array):
+    height = {}
+    for i,row in enumerate(array):
+        for j,elem in enumerate(row):
+            height[i,j] = elem
+    return height
+
+def height2array(height):
+    Lx,Ly = get_size(height)
+    array = np.zeros((Lx,Ly))
+
+    for i in range(Lx):
+        for j in range(Ly):
+            array[i,j] = height[i,j]
+    return array
+
 class QuantumBlur(BaseEffect):
     def __init__(self,job_id=None):
         super().__init__()
@@ -58,8 +97,9 @@ class QuantumBlur(BaseEffect):
         comp_color = np.array([[(self.latent_image[i, j] - mix[i, j] * self.lcolor) / (1 - mix[i, j]) if mix[i, j] < 1 else self.lcolor
                                 for j in range(mix.shape[1])] for i in range(mix.shape[0])])
 
-
-        new_mix = mix[..., np.newaxis]*self.strength
+        qc = qb.height2circuit(array2height(mix))
+        partial_x(qc, self.strength)
+        new_mix = height2array(qb.circuit2height(qc))[..., np.newaxis]
 
         new_latent_image = comp_color * (1 - new_mix) + new_mix * self.lcolor[np.newaxis, np.newaxis, :]
 

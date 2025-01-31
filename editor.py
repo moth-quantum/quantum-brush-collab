@@ -1,5 +1,8 @@
 import json
+import os
 import pickle
+import shutil
+
 import pygame
 import sys
 from config import *
@@ -7,7 +10,7 @@ from utils import *
 from Brush import Brush
 import importlib
 
-REQUIREMENTS = ["Run","Effect","File"]
+REQUIREMENTS = ["File","Brush","Effect","Run","Undo"]
 
 # Initialize pygame
 pygame.init()
@@ -21,12 +24,8 @@ class Property:
         self.value = value
         self.type = type
 
-    def position(self, x, y=None, width=None, height=None):
-        if y is None:
-            self.rect = pygame.Rect(PROPERTY_MARGIN * (x+1) + PROPERTY_WIDTH * x, PROPERTY_MARGIN, PROPERTY_WIDTH, PROPERTY_HEIGHT)
-            return None
-
-        self.rect = pygame.Rect(x, y, width, height)
+    def position(self, x, y):
+        self.rect = pygame.Rect(x, y,PROPERTY_WIDTH,PROPERTY_HEIGHT)
 
     def draw(self, screen):
         if self.type == "text":
@@ -93,10 +92,11 @@ class Property:
         return user_input
 
 class Canvas():
-    def __init__(self, file_property):
+    def __init__(self, file_property,x,y,width,height):
         self.file = file_property
         self.image = None
         self.image_rect = None
+        self.box = (x,y,width,height)
         self.update_image()
 
     def update_image(self):
@@ -104,8 +104,8 @@ class Canvas():
             try:
                 self.image = pygame.image.load("images/" + self.file.value)
                 image_ratio = self.image.get_width() / self.image.get_height()
-                max_width = SCREEN_WIDTH
-                max_height = SCREEN_HEIGHT - (PROPERTY_HEIGHT + PROPERTY_MARGIN * 2)
+                max_width = self.box[2] #SCREEN_WIDTH
+                max_height = self.box[3] #SCREEN_HEIGHT - (PROPERTY_HEIGHT + PROPERTY_MARGIN * 2)
 
                 if max_width / max_height > image_ratio:
                     new_height = max_height
@@ -116,9 +116,9 @@ class Canvas():
 
                 self.image = pygame.transform.scale(self.image, (new_width, new_height))
                 self.image_rect = self.image.get_rect(
-                    center=(SCREEN_WIDTH // 2, (SCREEN_HEIGHT + PROPERTY_HEIGHT) // 2))
+                    center=(self.box[0] + self.box[2] // 2, self.box[1] + self.box[3] // 2))
             except pygame.error:
-                print(f"Unable to load image: {self.file_path}")
+                print(f"Unable to load image: {self.file.value}")
                 self.image = None
                 self.image_rect = None
         else:
@@ -136,63 +136,115 @@ class App:
         pygame.display.set_caption("Brush Editor")
 
         self.running = True
+
+        self.nshelf = 3
+        self.shelves = [0] * self.nshelf
+
         self.buttons = {}
-        self.req = ["File","Run","Brush","Effect"]
+        self.req = REQUIREMENTS
         for req in self.req:
             self.add_button(req)
 
-        self.canvas = Canvas(self.buttons["File"])
+        y_offset = PROPERTY_HEIGHT *self.nshelf + PROPERTY_MARGIN*(self.nshelf+1)
+        self.canvas = Canvas(self.buttons["File"],PROPERTY_MARGIN,y_offset,  SCREEN_WIDTH - PROPERTY_MARGIN * 2,SCREEN_HEIGHT-y_offset-PROPERTY_MARGIN)
+
         self.brush_req = []
         self.effect_req = []
         self.brush = self.add_brush()
         self.add_effect()
 
+
     def add_brush(self):
         #Clean up old brush buttons
-        to_clean = [x for x in self.brush_req if x not in self.req + self.effect_req]
-        for k in to_clean:
+        for k in self.brush_req:
             self.buttons.pop(k,None)
+        self.shelves[1] = 0
 
         brush = importlib.import_module(self.buttons["Brush"].value)
         self.brush_req = brush.REQUIREMENTS
         for req in self.brush_req:
-            self.add_button(req, False)
+            self.add_button(req, True)
 
         self.brush = getattr(brush, self.buttons["Brush"].value)(*(self.buttons[k] for k in self.brush_req))
         return self.brush
 
     def add_effect(self):
         # Clean up old brush buttons
-        to_clean = [x for x in self.effect_req if x not in self.req + self.brush_req]
-        for k in to_clean:
+        for k in self.effect_req:
             self.buttons.pop(k, None)
             self.brush.properties.pop(k,None)
+        self.shelves[2]=0
 
         effect = importlib.import_module("effects."+self.buttons["Effect"].value)
         self.effect_req = effect.REQUIREMENTS
         for req in self.effect_req:
-            self.add_button(req, False)
+            self.add_button(req, True)
             if req in self.buttons:
                 self.brush.add_property(self.buttons[req])
+
+    def add2shelf(self,y,prop: Property):
+        x = self.shelves[y]
+        prop.position(PROPERTY_MARGIN * (x + 1) + PROPERTY_WIDTH * x, PROPERTY_MARGIN * (y + 1) + PROPERTY_HEIGHT * y)
+        self.shelves[y] +=1
 
     def add_button(self,label,replace = True):
         if label in self.buttons.keys() and not replace:
             return None
 
         match label:
-            case "Effect": self.buttons[label] = Property("Effect", "QuantumBlur",type = "text")
-            case "Brush": self.buttons[label] = Property("Brush", "Brush", type="text")
-            case "Color": self.buttons[label] = Property("Color", "white",type = "text")
-            case "Radius": self.buttons[label] = Property("Radius", "10",type = "text")
-            case "Strength": self.buttons[label] = Property("Strength", "0.5", type="text")
-            case "File": self.buttons[label] = Property("File", "test.png",type="text")
-            case "Status": self.buttons[label] = Property("Status", True, type="toggle")
-            case "Run": self.buttons[label] = Property("Run", False, type="toggle")
+            case "Effect":
+                self.buttons[label] = Property("Effect", "QuantumBlur",type = "text")
+                self.add2shelf(0,self.buttons[label])
+            case "Brush":
+                self.buttons[label] = Property("Brush", "Brush", type="text")
+                self.add2shelf(0, self.buttons[label])
+            case "Color":
+                self.buttons[label] = Property("Color", "white",type = "text")
+                self.add2shelf(2, self.buttons[label])
+            case "Radius":
+                self.buttons[label] = Property("Radius", "10",type = "text")
+                self.add2shelf(1, self.buttons[label])
+            case "Strength":
+                self.buttons[label] = Property("Strength", "0.5", type="text")
+                self.add2shelf(2, self.buttons[label])
+            case "File":
+                self.buttons[label] = Property("File", "test",type="text")
+                self.add2shelf(0, self.buttons[label])
+            case "Undo":
+                self.buttons[label] = Property("Undo", False, type="text")
+                self.add2shelf(0, self.buttons[label])
+            case "Status":
+                self.buttons[label] = Property("Status", True, type="toggle")
+                self.add2shelf(1, self.buttons[label])
+            case "Run":
+                self.buttons[label] = Property("Run", False, type="toggle")
+                self.add2shelf(0, self.buttons[label])
             case _:
                 print(f"Label {label} is not yet implemented")
                 return None
 
-        self.buttons[label].position(len(self.buttons)-1)
+
+    def clean_directory(self,directory: str):
+        """
+        Removes all files and subdirectories inside the given directory.
+
+        :param directory: Path to the directory to clean.
+        """
+        if not os.path.exists(directory):
+            print(f"Directory '{directory}' does not exist.")
+            return
+
+        for item in os.listdir(directory):
+            item_path = os.path.join(directory, item)
+            try:
+                if os.path.isfile(item_path) or os.path.islink(item_path):
+                    os.unlink(item_path)  # Remove file or symbolic link
+                elif os.path.isdir(item_path):
+                    shutil.rmtree(item_path)  # Remove directory and contents
+            except Exception as e:
+                print(f"Failed to delete {item_path}: {e}")
+
+        print(f"Directory '{directory}' has been cleaned.")
 
     def run(self):
         while self.running:
@@ -219,6 +271,7 @@ class App:
                                 break
                             case "File":
                                 self.canvas.update_image()
+                        print(prop.label)
                         event_handled = True
 
                 if not event_handled:
@@ -239,3 +292,4 @@ class App:
 if __name__ == "__main__":
     app = App()
     app.run()
+    app.clean_directory('temp/')
