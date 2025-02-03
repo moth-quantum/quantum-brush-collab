@@ -2,6 +2,8 @@ import json
 import os
 import pickle
 import shutil
+from copy import copy, deepcopy
+from email.policy import default
 
 import pygame
 import sys
@@ -23,9 +25,14 @@ class Property:
         self.label = label
         self.value = value
         self.type = type
+        self.default = deepcopy(value)
+        self.default_type = value.__class__
 
     def position(self, x, y):
         self.rect = pygame.Rect(x, y,PROPERTY_WIDTH,PROPERTY_HEIGHT)
+
+    def reset(self):
+        self.value = deepcopy(self.default)
 
     def draw(self, screen):
         if self.type == "text":
@@ -112,6 +119,12 @@ class Property:
                         selected_color = COLOR_GRID[row][col]
                         running = False
 
+        try:
+            selected_color = self.default_type(selected_color)
+        except:
+            print(f"Could not convert {str(selected_color)} to type {str(self.default_type)}")
+            selected_color = self.default
+
         return selected_color
 
     def get_user_text(self, prompt):
@@ -144,7 +157,12 @@ class Property:
 
             pygame.display.flip()
 
-        #pygame.display.set_caption("Brush Editor")
+        try:
+            user_input = self.default_type(user_input)
+        except:
+            print(f"Could not convert {str(user_input)} to type {str(self.default_type)}")
+            user_input = self.default
+
         return user_input
 
 class Canvas():
@@ -285,10 +303,10 @@ class App:
                 self.buttons[label] = Property("Color", (255,255,255),type = "color")
                 self.add2shelf(2, self.buttons[label])
             case "Radius":
-                self.buttons[label] = Property("Radius", "10",type = "text")
+                self.buttons[label] = Property("Radius", 10,type = "text")
                 self.add2shelf(1, self.buttons[label])
             case "Strength":
-                self.buttons[label] = Property("Strength", "0.5", type="text")
+                self.buttons[label] = Property("Strength", 0.5, type="text")
                 self.add2shelf(2, self.buttons[label])
             case "File":
                 self.buttons[label] = Property("File", "images/spiral.png",type="title")
