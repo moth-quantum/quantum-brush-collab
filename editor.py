@@ -10,7 +10,7 @@ from utils import *
 from Brush import Brush
 import importlib
 
-REQUIREMENTS = ["File","Brush","Effect","Run","Undo"]
+REQUIREMENTS = ["File","Brush","Effect","Run","Undo","Export"]
 
 # Initialize pygame
 pygame.init()
@@ -165,6 +165,10 @@ class Canvas():
 
         self.update_image()
 
+    def export_image(self):
+        new_path = "images/" + self.name + "_" + str(self.modifications) + ".png"
+        shutil.copy(self.file_path.value, new_path)
+
     def undo_image(self):
         self.modifications -= 1
         new_path = "temp/" + self.name + "." + str(self.modifications) + ".png"
@@ -298,6 +302,9 @@ class App:
             case "Run":
                 self.buttons[label] = Property("Run", False, type="once")
                 self.add2shelf(0, self.buttons[label])
+            case "Export":
+                self.buttons[label] = Property("Export", False, type="once")
+                self.add2shelf(0, self.buttons[label])
             case _:
                 print(f"Label {label} is not yet implemented")
                 return None
@@ -355,6 +362,9 @@ class App:
                             case "Undo":
                                 self.canvas.undo_image()
                                 self.buttons["Undo"].value = False
+                            case "Export":
+                                self.canvas.export_image()
+                                self.buttons["Export"].value = False
 
                         event_handled = True
 
