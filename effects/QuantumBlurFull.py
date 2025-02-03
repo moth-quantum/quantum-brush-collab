@@ -39,11 +39,8 @@ def extract_weight(lcolor1, lcolor2):
 
 def partial_x(qc, fraction):
     for j in range(qc.num_qubits):
-        qc.rx(np.pi * fraction, j)
+        qc.rx(np.pi * fraction/2, j)
 
-def partial_x(qc, fraction):
-    for j in range(qc.num_qubits):
-        qc.rx(np.pi * fraction, j)
 
 def get_size(height):
     """
@@ -83,8 +80,9 @@ class QuantumBlur(BaseEffect):
 
     def build(self):
         #TODO: Check if everything is in the correct format
-        color = pygame.Color(self.parameters["Color"])
-        color = [color.r,color.g,color.b]
+        #color = pygame.Color(self.parameters["Color"])
+        #color = [color.r,color.g,color.b]
+        color = self.parameters["Color"]
         self.image = np.array(self.parameters["Image"])
         self.strength = float(self.parameters["Strength"])
         self.lcolor = np.array(mixbox.rgb_to_latent(color))
@@ -96,9 +94,10 @@ class QuantumBlur(BaseEffect):
         comp_color = np.array([[(self.latent_image[i, j] - mix[i, j] * self.lcolor) / (1 - mix[i, j]) if mix[i, j] < 1 else self.lcolor
                                 for j in range(mix.shape[1])] for i in range(mix.shape[0])])
 
+        max_h = np.max(mix)
         qc = height2circuit(array2height(mix))
         partial_x(qc, self.strength)
-        new_mix = height2array(circuit2height(qc))[..., np.newaxis]
+        new_mix = height2array(circuit2height(qc))[..., np.newaxis]*max_h
 
         new_latent_image = comp_color * (1 - new_mix) + new_mix * self.lcolor[np.newaxis, np.newaxis, :]
 

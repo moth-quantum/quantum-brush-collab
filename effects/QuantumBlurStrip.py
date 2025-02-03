@@ -41,9 +41,6 @@ def partial_x(qc, fraction):
     for j in range(qc.num_qubits):
         qc.rx(np.pi * fraction, j)
 
-def partial_x(qc, fraction):
-    for j in range(qc.num_qubits):
-        qc.rx(np.pi * fraction, j)
 
 def get_size(height):
     """
@@ -73,7 +70,7 @@ def height2array(height):
             array[i,j] = height[i,j]
     return array
 
-def blur_strips(height, points, radius, strength, method='rx', rotate=False):
+def blur_strips(height, points, radius, strength, method='rx', rotate=False,max_h = None):
     """
     Applies Quantum Blur to a heighmap on a region defined by a radius
     and a set of points.
@@ -164,7 +161,7 @@ def blur_strips(height, points, radius, strength, method='rx', rotate=False):
         for _, (dx, dy) in grid.items():
             pos = (x0 + dx, y0 + dy)
             if pos in height:
-                new_height[pos] = strip_height[dx, dy]
+                new_height[pos] = strip_height[dx, dy]*max_h
 
     return new_height
 
@@ -179,8 +176,9 @@ class QuantumBlur(BaseEffect):
 
     def build(self):
         #TODO: Check if everything is in the correct format
-        color = pygame.Color(self.parameters["Color"])
-        color = [color.r,color.g,color.b]
+        #color = pygame.Color(self.parameters["Color"])
+        #color = [color.r,color.g,color.b]
+        color = self.parameters["Color"]
         self.image = np.array(self.parameters["Image"])
         self.strength = float(self.parameters["Strength"])
         self.points = self.parameters["Points"]
@@ -194,7 +192,8 @@ class QuantumBlur(BaseEffect):
         comp_color = np.array([[(self.latent_image[i, j] - mix[i, j] * self.lcolor) / (1 - mix[i, j]) if mix[i, j] < 1 else self.lcolor
                                 for j in range(mix.shape[1])] for i in range(mix.shape[0])])
 
-        new_mix = blur_strips(array2height(mix), self.points, self.radius, self.strength, method='rx', rotate=False)
+        max_h = np.max(mix)
+        new_mix = blur_strips(array2height(mix), self.points, 2*self.radius, self.strength, method='rx', rotate=False,max_h=max_h)
         new_mix = height2array(new_mix)[..., np.newaxis]
 
         new_latent_image = comp_color * (1 - new_mix) + new_mix * self.lcolor[np.newaxis, np.newaxis, :]

@@ -17,3 +17,33 @@ PROPERTY_MARGIN = 10
 PROPERTY_CORNER_RADIUS = 10
 
 FONT_SIZE = 24
+
+GRID_ROWS = 7
+GRID_COLS = 10
+CELL_SIZE = 50
+
+# Define base colors (7 hues)
+BASE_COLORS = [
+    (255, 0, 0),     # Red
+    (255, 165, 0),   # Orange
+    (255, 255, 0),   # Yellow
+    (0, 255, 0),     # Green
+    (0, 255, 255),   # Cyan
+    (0, 0, 255),     # Blue
+    (128, 0, 128)    # Purple
+]
+
+# Function to generate color shades
+def generate_shades(base_color, num_shades=10):
+    shades = []
+    for i in range(num_shades):
+        factor = (i + 1) / num_shades
+        shades.append((
+            int(base_color[0] * factor),
+            int(base_color[1] * factor),
+            int(base_color[2] * factor)
+        ))
+    return shades
+
+# Generate all colors for the grid
+COLOR_GRID = [generate_shades(color, GRID_COLS) for color in BASE_COLORS]

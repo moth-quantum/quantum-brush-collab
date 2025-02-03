@@ -58,12 +58,12 @@ def interpolate_points(points, num_points):
 
 def apply_circle(mask, x, y, radius):
     # Get the shape of the mask
-    height, width = mask.shape
+    width,height = mask.shape
     cx = int(x)
     cy = int(y)
     r = int(radius)
-
     # Loop over the bounding box around the center (cx, cy)
+
     for x in range(max(0, cx - r), min(width, cx + r + 1)):
         for y in range(max(0, cy - r), min(height, cy + r + 1)):
             # Check if the point (x, y) is within the circle
@@ -368,7 +368,7 @@ def height2circuit(height, log=False, eps=1e-2, grid=None):
     return qc
 
 
-def probs2height(probs, size=None, log=False, grid=None):
+def probs2height(probs, size=None, log=False, grid=None,maximum_h = None):
     """
     Extracts a dictionary of heights (or brightnesses) on a grid from
     a set of probabilities for the output of a quantum circuit into
@@ -401,7 +401,7 @@ def probs2height(probs, size=None, log=False, grid=None):
         grid, n = make_grid(Lx, Ly)
 
     # set height to probs value, rescaled such that the maximum is 1
-    max_h = max(probs.values())
+    max_h = maximum_h or max(probs.values())
     height = {(x, y): 0.0 for x in range(Lx) for y in range(Ly)}
     for bitstring in probs:
         if bitstring in grid:
@@ -420,7 +420,7 @@ def probs2height(probs, size=None, log=False, grid=None):
     return height
 
 
-def circuit2height(qc, log=False, grid=None):
+def circuit2height(qc, log=False, grid=None,maximum_h=None):
     """
     Extracts a dictionary of heights (or brightnesses) on a grid from
     the quantum circuit into which it has been encoded.
@@ -447,7 +447,7 @@ def circuit2height(qc, log=False, grid=None):
         # if not in circuit name, infer it from qubit number
         L = int(2 ** (qc.num_qubits / 2))
         size = (L, L)
-    return probs2height(probs, size=size, log=log, grid=grid)
+    return probs2height(probs, size=size, log=log, grid=grid,maximum_h=maximum_h)
 
 
 def combine_circuits(qc0, qc1):

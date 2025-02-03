@@ -21,6 +21,9 @@ class Brush:
         if not self.properties["Status"].value:
             self.brush_path = []
             self.box = None
+    def reset(self):
+        self.properties["Status"].value = False
+        self.update()
 
     def add_property(self,property):
         self.properties[property.label] = property
@@ -92,10 +95,7 @@ class Brush:
         #Apply mask to original image
         image_array[mask] = updated_image[cropped_mask]
         updated_image_pil = Image.fromarray(np.dstack((image_array,alpha_array)).swapaxes(0, 1), mode="RGBA")
-
-        canvas.file.value = "up_"+canvas.file.value
-        updated_image_pil.save("images/"+canvas.file.value,format="png")
-        canvas.update_image()
+        canvas.update_image(updated_image_pil)
 
         # Reset the brush
         self.properties["Status"].value = False
