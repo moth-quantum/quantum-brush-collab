@@ -5,8 +5,7 @@ import pygame
 from mixbox import rgb_to_latent, latent_to_rgb
 from effects.BaseEffect import BaseEffect
 import sys
-# caution: path[0] is reserved for script path (or '' in REPL)
-import quantumblur as qb
+from utils import *
 
 #List of effect-specific requirements
 REQUIREMENTS = ["Image","Color","Strength"]
@@ -97,9 +96,9 @@ class QuantumBlur(BaseEffect):
         comp_color = np.array([[(self.latent_image[i, j] - mix[i, j] * self.lcolor) / (1 - mix[i, j]) if mix[i, j] < 1 else self.lcolor
                                 for j in range(mix.shape[1])] for i in range(mix.shape[0])])
 
-        qc = qb.height2circuit(array2height(mix))
+        qc = height2circuit(array2height(mix))
         partial_x(qc, self.strength)
-        new_mix = height2array(qb.circuit2height(qc))[..., np.newaxis]
+        new_mix = height2array(circuit2height(qc))[..., np.newaxis]
 
         new_latent_image = comp_color * (1 - new_mix) + new_mix * self.lcolor[np.newaxis, np.newaxis, :]
 
