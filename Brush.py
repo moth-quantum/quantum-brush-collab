@@ -42,8 +42,8 @@ class Brush:
         x_coords = [p[0] for p in self.brush_path]
         y_coords = [p[1] for p in self.brush_path]
         self.box = (
-            min(x_coords) - radius, min(y_coords) - radius,
-            max(x_coords) + radius + 1, max(y_coords) + radius + 1
+            min(x_coords) - radius, max(y_coords) + radius,
+            max(x_coords) + radius, min(y_coords) - radius
         )
 
     def run_brush(self,canvas,effect):
@@ -53,11 +53,11 @@ class Brush:
         box_right, box_top = rescale_coordinates(canvas.image_rect, (box_right, box_top))
 
         # Convert the surface to an array for manipulation
-        image_array = pygame.surfarray.pixels3d(canvas.image).swapaxes(0, 1)
-        alpha_array = pygame.surfarray.pixels_alpha(canvas.image).swapaxes(0, 1)
+        image_array = pygame.surfarray.pixels3d(canvas.image)#.swapaxes(0, 1)
+        alpha_array = pygame.surfarray.pixels_alpha(canvas.image)#.swapaxes(0, 1)
 
         # Crop the image region
-        cropped_image = image_array[box_bottom:box_top,box_left:box_right]
+        cropped_image = image_array[box_left:box_right+1,box_top:box_bottom+1]
 
         # Create a mask to apply radius-based transparency
         radius = int(self.properties["Radius"].value)
@@ -69,12 +69,12 @@ class Brush:
 
         # Crop the mask
         mask = mask.astype(bool)
-        cropped_mask = mask[box_bottom:box_top,box_left:box_right]
-
+        cropped_mask = mask[box_left:box_right+1,box_top:box_bottom+1]
 
         effect_params = {"Image": cropped_image,
                          "Mask": cropped_mask,
-                         "Points": [[point[1]-box_top, point[0] - box_left] for point in path]}
+                         "Points": [(point[0] - box_left, point[1]-box_top) for point in path],
+                         "Radius": radius}
         effect_params |= {prop: self.properties[prop].value for prop in self.properties}
 
         effect_id = str(np.random.randint(np.iinfo(np.int64).max))
@@ -91,7 +91,7 @@ class Brush:
 
         #Apply mask to original image
         image_array[mask] = updated_image[cropped_mask]
-        updated_image_pil = Image.fromarray(np.dstack((image_array,alpha_array)), mode="RGBA")
+        updated_image_pil = Image.fromarray(np.dstack((image_array,alpha_array)).swapaxes(0, 1), mode="RGBA")
 
         canvas.file.value = "up_"+canvas.file.value
         updated_image_pil.save("images/"+canvas.file.value,format="png")

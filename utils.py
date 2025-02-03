@@ -68,7 +68,7 @@ def apply_circle(mask, x, y, radius):
         for y in range(max(0, cy - r), min(height, cy + r + 1)):
             # Check if the point (x, y) is within the circle
             if (x - cx) ** 2 + (y - cy) ** 2 <= r ** 2:
-                mask[y,x] = 1  # Set the point to 1
+                mask[x,y] = 1  # Set the point to 1
     return mask
 
 

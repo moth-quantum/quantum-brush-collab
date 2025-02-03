@@ -35,7 +35,7 @@ class BaseEffect:
 
     @abstractmethod
     def apply(self):
-        return self.new_image
+        pass
 
     def update(self):
         pass
