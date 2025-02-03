@@ -99,6 +99,10 @@ class Canvas():
         self.box = (x,y,width,height)
         self.update_image()
 
+    def undo_image(self):
+        self.file.value = self.file.value[3:]
+        self.update_image()
+
     def update_image(self):
         if self.file.value:
             try:
@@ -145,13 +149,18 @@ class App:
         for req in self.req:
             self.add_button(req)
 
-        y_offset = PROPERTY_HEIGHT *self.nshelf + PROPERTY_MARGIN*(self.nshelf+1)
-        self.canvas = Canvas(self.buttons["File"],PROPERTY_MARGIN,y_offset,  SCREEN_WIDTH - PROPERTY_MARGIN * 2,SCREEN_HEIGHT-y_offset-PROPERTY_MARGIN)
+        self.canvas = self.add_canvas()
 
         self.brush_req = []
         self.effect_req = []
         self.brush = self.add_brush()
         self.add_effect()
+
+    def add_canvas(self):
+        y_offset = PROPERTY_HEIGHT * self.nshelf + PROPERTY_MARGIN * (self.nshelf + 1)
+
+        self.canvas = Canvas(self.buttons["File"], PROPERTY_MARGIN, y_offset, SCREEN_WIDTH - PROPERTY_MARGIN * 2,
+                             SCREEN_HEIGHT - y_offset - PROPERTY_MARGIN)
 
 
     def add_brush(self):
@@ -169,7 +178,7 @@ class App:
         return self.brush
 
     def add_effect(self):
-        # Clean up old brush buttons
+        # Clean up old effect buttons
         for k in self.effect_req:
             self.buttons.pop(k, None)
             self.brush.properties.pop(k,None)
@@ -193,7 +202,7 @@ class App:
 
         match label:
             case "Effect":
-                self.buttons[label] = Property("Effect", "QuantumBlur",type = "text")
+                self.buttons[label] = Property("Effect", "QuantumBlurStrip",type = "text")
                 self.add2shelf(0,self.buttons[label])
             case "Brush":
                 self.buttons[label] = Property("Brush", "Brush", type="text")
@@ -208,10 +217,10 @@ class App:
                 self.buttons[label] = Property("Strength", "0.5", type="text")
                 self.add2shelf(2, self.buttons[label])
             case "File":
-                self.buttons[label] = Property("File", "test",type="text")
+                self.buttons[label] = Property("File", "spiral.png",type="text")
                 self.add2shelf(0, self.buttons[label])
             case "Undo":
-                self.buttons[label] = Property("Undo", False, type="text")
+                self.buttons[label] = Property("Undo", False, type="toggle")
                 self.add2shelf(0, self.buttons[label])
             case "Status":
                 self.buttons[label] = Property("Status", True, type="toggle")
@@ -222,7 +231,6 @@ class App:
             case _:
                 print(f"Label {label} is not yet implemented")
                 return None
-
 
     def clean_directory(self,directory: str):
         """
@@ -271,6 +279,9 @@ class App:
                                 break
                             case "File":
                                 self.canvas.update_image()
+                            case "Undo":
+                                self.canvas.undo_image()
+                                self.buttons["Undo"].value = False
                         print(prop.label)
                         event_handled = True
 
