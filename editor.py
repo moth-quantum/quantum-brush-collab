@@ -178,7 +178,14 @@ class Canvas():
 
     def copy2temp(self):
         new_path = "temp/"+self.name+"."+str(self.modifications)+".png"
-        shutil.copy(self.file_path.value, new_path)
+        try:
+            shutil.copy(self.file_path.value, new_path)
+        except FileNotFoundError:
+            print(f"Could nor find an image at {self.file_path.value}.")
+            self.file_path.reset()
+            self.name = self.file_path.value.split("/")[-1].split(".")[0]
+            shutil.copy(self.file_path.value, new_path)
+
         self.file_path.value = new_path
 
         self.update_image()
@@ -188,7 +195,7 @@ class Canvas():
         shutil.copy(self.file_path.value, new_path)
 
     def undo_image(self):
-        self.modifications -= 1
+        self.modifications = max(0,self.modifications-1)
         new_path = "temp/" + self.name + "." + str(self.modifications) + ".png"
         self.file_path.value = new_path
         self.update_image()
@@ -256,12 +263,18 @@ class App:
         return self.canvas
 
     def add_brush(self):
+        try:
+            brush = importlib.import_module(self.buttons["Brush"].value)
+        except ModuleNotFoundError:
+            print(f"Could not find brush {self.buttons["Brush"].value}.")
+            self.buttons["Brush"].reset()
+            return None
+
         #Clean up old brush buttons
         for k in self.brush_req:
             self.buttons.pop(k,None)
         self.shelves[1] = 0
 
-        brush = importlib.import_module(self.buttons["Brush"].value)
         self.brush_req = brush.REQUIREMENTS
         for req in self.brush_req:
             self.add_button(req, True)
@@ -270,13 +283,19 @@ class App:
         return self.brush
 
     def add_effect(self):
+        try:
+            effect = importlib.import_module("effects."+self.buttons["Effect"].value)
+        except ModuleNotFoundError:
+            print(f"Could not find effect {self.buttons["Effect"].value}.")
+            self.buttons["Effect"].reset()
+            return None
+
         # Clean up old effect buttons
         for k in self.effect_req:
             self.buttons.pop(k, None)
             self.brush.properties.pop(k,None)
         self.shelves[2]=0
 
-        effect = importlib.import_module("effects."+self.buttons["Effect"].value)
         self.effect_req = effect.REQUIREMENTS
         for req in self.effect_req:
             self.add_button(req, True)
@@ -294,7 +313,7 @@ class App:
 
         match label:
             case "Effect":
-                self.buttons[label] = Property("Effect", "QuantumBlurFull",type = "title")
+                self.buttons[label] = Property("Effect", "QuantumBlurFull",type = "text")
                 self.add2shelf(0,self.buttons[label])
             case "Brush":
                 self.buttons[label] = Property("Brush", "Brush", type="title")
@@ -309,7 +328,7 @@ class App:
                 self.buttons[label] = Property("Strength", 0.5, type="text")
                 self.add2shelf(2, self.buttons[label])
             case "File":
-                self.buttons[label] = Property("File", "images/spiral.png",type="title")
+                self.buttons[label] = Property("File", "images/atlas.png",type="title")
                 self.add2shelf(0, self.buttons[label])
             case "Undo":
                 self.buttons[label] = Property("Undo", False, type="once")
