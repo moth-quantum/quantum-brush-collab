@@ -131,7 +131,7 @@ class Property:
 
     def get_user_text(self, prompt):
         pygame.display.set_caption(prompt)
-        user_input = ""
+        user_input = self.value
         input_active = True
 
         while input_active:
@@ -412,7 +412,7 @@ class App:
 
             self.brush.update()
 
-            self.screen.fill(WHITE)
+            self.screen.fill(BACK_COLOR)
 
             self.canvas.draw(self.screen)
             self.brush.draw(self.screen, mouse_pos)

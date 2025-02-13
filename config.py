@@ -9,7 +9,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GRAY = (200, 200, 200)
 RED = (255, 0, 0)
-GREEN = (0,255, 0)
+GREEN = (46,139,87)
+BACK_COLOR = (183,197,199)
 # Property dimensions
 PROPERTY_WIDTH = 190
 PROPERTY_HEIGHT = 30
@@ -30,7 +31,8 @@ BASE_COLORS = [
     (0, 255, 0),     # Green
     (0, 255, 255),   # Cyan
     (0, 0, 255),     # Blue
-    (128, 0, 128)    # Purple
+    (128, 0, 128),    # Purple
+    (255,255,255)
 ]
 
 # Function to generate color shades

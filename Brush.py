@@ -104,6 +104,7 @@ class Brush:
     def draw(self, screen, mouse_pos):
         # Draw the brush cursor
         color = pygame.Color("white")
+        color.a = 255
         radius = int(self.properties["Radius"].value)
 
         # Draw the path as lines
