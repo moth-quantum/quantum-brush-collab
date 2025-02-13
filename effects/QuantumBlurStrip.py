@@ -1,9 +1,6 @@
-import sys
-import numpy as np
 import mixbox
-import pygame
 from mixbox import rgb_to_latent, latent_to_rgb
-from effects.BaseEffect import BaseEffect
+from BaseEffect import BaseEffect
 import sys
 from utils import *
 
@@ -166,7 +163,7 @@ def blur_strips(height, points, radius, strength, method='rx', rotate=False,max_
     return new_height
 
 
-class QuantumBlur(BaseEffect):
+class QuantumBlurStrip(BaseEffect):
     def __init__(self,job_id=None):
         super().__init__()
         self.label = "Quantum Blur"
@@ -209,4 +206,4 @@ if __name__ == "__main__":
         print("Please provide an ID as a command-line argument.")
         sys.exit(1)
 
-    QuantumBlur(sys.argv[1])
+    QuantumBlurStrip(sys.argv[1])

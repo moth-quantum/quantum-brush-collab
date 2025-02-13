@@ -1,12 +1,14 @@
 import json
 import os
+import sys
+sys.path.append("./effects")
 import pickle
 import shutil
 from copy import copy, deepcopy
 from email.policy import default
 
 import pygame
-import sys
+
 from config import *
 from utils import *
 from Brush import Brush
@@ -284,7 +286,7 @@ class App:
 
     def add_effect(self):
         try:
-            effect = importlib.import_module("effects."+self.buttons["Effect"].value)
+            effect = importlib.import_module(self.buttons["Effect"].value)
         except ModuleNotFoundError:
             print(f"Could not find effect {self.buttons["Effect"].value}.")
             self.buttons["Effect"].reset()

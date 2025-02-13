@@ -1,9 +1,10 @@
 import sys
+import os
 import numpy as np
 import mixbox
 import pygame
 from mixbox import rgb_to_latent, latent_to_rgb
-from effects.BaseEffect import BaseEffect
+from BaseEffect import BaseEffect
 import sys
 from utils import *
 
@@ -70,7 +71,7 @@ def height2array(height):
             array[i,j] = height[i,j]
     return array
 
-class QuantumBlur(BaseEffect):
+class QuantumBlurFull(BaseEffect):
     def __init__(self,job_id=None):
         super().__init__()
         self.label = "Quantum Blur"
@@ -112,4 +113,4 @@ if __name__ == "__main__":
         print("Please provide an ID as a command-line argument.")
         sys.exit(1)
 
-    QuantumBlur(sys.argv[1])
+    QuantumBlurFull(sys.argv[1])

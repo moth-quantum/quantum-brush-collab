@@ -1,6 +1,5 @@
 from abc import abstractmethod
 import pickle
-from editor import Property
 
 
 class BaseEffect:

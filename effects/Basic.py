@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import pygame
+
 from effects.BaseEffect import BaseEffect
 
 # List of effect-specific requirements
