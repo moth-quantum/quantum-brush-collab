@@ -9,7 +9,7 @@ import sys
 from utils import *
 
 #List of effect-specific requirements
-REQUIREMENTS = ["Image","Color","Strength"]
+REQUIREMENTS = ["Image","Color","Strength","Orientation"]
 
 rgb2l = lambda x: rgb_to_latent(list(x))
 l2rgb = lambda x: latent_to_rgb(list(x))
@@ -88,14 +88,17 @@ class QuantumBlurFull(BaseEffect):
         self.latent_image = np.apply_along_axis(rgb2l, axis=-1, arr=self.image)
         self.points = interpolate_pixels(self.parameters["Points"])
         self.radius = int(self.parameters["Radius"])
+        self.vertical = (self.parameters["Orientation"] == "vertical")
 
     def apply(self):
         mix = np.array([[extract_weight(c, self.lcolor) for c in row] for row in self.latent_image])
 
         comp_color = np.array([[(self.latent_image[i, j] - mix[i, j] * self.lcolor) / (1 - mix[i, j]) if mix[i, j] < 1 else self.lcolor
                                 for j in range(mix.shape[1])] for i in range(mix.shape[0])])
-
-        cut_mix = np.array([mix[x,y-self.radius:y+self.radius+1] for x,y in self.points])
+        if self.vertical:
+            cut_mix = np.array([mix[x,y-self.radius:y+self.radius+1] for x,y in self.points])
+        else:
+            cut_mix = np.array([mix[x - self.radius:x + self.radius + 1,y] for x, y in self.points])
 
         max_h = np.max(cut_mix)
         qc = height2circuit(array2height(cut_mix))
@@ -105,7 +108,11 @@ class QuantumBlurFull(BaseEffect):
         new_mix = mix * 1.
         for i,val in enumerate(new_cut_mix):
             x,y = self.points[i]
-            new_mix[x,y-self.radius:y+self.radius+1] = val
+            if self.vertical:
+                new_mix[x,y-self.radius:y+self.radius+1] = val
+            else:
+                new_mix[x - self.radius:x + self.radius + 1,y] = val
+
         new_mix=new_mix[...,np.newaxis]
         new_latent_image = comp_color * (1 - new_mix) + new_mix * self.lcolor[np.newaxis, np.newaxis, :]
 

@@ -343,6 +343,9 @@ class App:
             case "Export":
                 self.buttons[label] = Property("Export", False, type="once")
                 self.add2shelf(0, self.buttons[label])
+            case "Orientation":
+                self.buttons[label] = Property("Orientation", "vertical", type="text")
+                self.add2shelf(2, self.buttons[label])
             case _:
                 print(f"Label {label} is not yet implemented")
                 return None

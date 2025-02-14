@@ -61,6 +61,9 @@ class Brush:
 
     def run_brush(self,canvas,effect):
         # Extract the portion of the image within the bounding box
+        if not self.box:
+            return None
+
         box_left, box_bottom, box_right, box_top = self.box
         box_left, box_bottom = rescale_coordinates(canvas.image_rect, (box_left, box_bottom))
         box_right, box_top = rescale_coordinates(canvas.image_rect, (box_right, box_top))
