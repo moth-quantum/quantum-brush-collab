@@ -8,7 +8,7 @@ from utils import *
 from PIL import Image
 
 #List of brush-specific requirements
-REQUIREMENTS = ["Status","Radius"]
+REQUIREMENTS = ["Clear","Radius"]
 
 class Brush:
     def __init__(self, *properties):
@@ -16,24 +16,34 @@ class Brush:
         self.properties = {property.label: property for property in properties}
         self.brush_path = []
         self.box = None
+        self.clicked = False
 
     def update(self):
-        if not self.properties["Status"].value:
-            self.brush_path = []
-            self.box = None
+        #if not self.properties["Status"].value:
+        self.brush_path = []
+        self.box = None
     def reset(self):
-        self.properties["Status"].value = False
-        self.update()
+        #self.properties["Status"].value = False
+        self.brush_path = []
+        self.box = None
 
     def add_property(self,property):
         self.properties[property.label] = property
 
     def handle_event(self, event):
-        if self.properties["Status"].value and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        if  event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            self.clicked = True
+            return True
+        elif  event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            self.clicked = False
+            return True
+
+        elif self.clicked:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             self.brush_path.append((mouse_x, mouse_y))
             self.update_box()
             return True
+
         return False
 
     def update_box(self):
@@ -98,8 +108,7 @@ class Brush:
         canvas.update_image(updated_image_pil)
 
         # Reset the brush
-        self.properties["Status"].value = False
-        self.update()
+        self.reset()
 
     def draw(self, screen, mouse_pos):
         # Draw the brush cursor

@@ -178,10 +178,12 @@ class QuantumBlurStrip(BaseEffect):
         color = self.parameters["Color"]
         self.image = np.array(self.parameters["Image"])
         self.strength = float(self.parameters["Strength"])
-        self.points = self.parameters["Points"]
+        self.points = interpolate_pixels(self.parameters["Points"])
         self.radius = int(self.parameters["Radius"])
         self.lcolor = np.array(mixbox.rgb_to_latent(color))
         self.latent_image = np.apply_along_axis(rgb2l, axis=-1, arr=self.image)
+
+
 
     def apply(self):
         mix = np.array([[extract_weight(c, self.lcolor) for c in row] for row in self.latent_image])

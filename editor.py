@@ -77,13 +77,9 @@ class Property:
                 if self.type == "toggle" or self.type == "once":
                     self.value = not self.value
                 elif self.type == "text" or self.type=="title":
-                    new_value = self.get_user_text(f"Enter new {self.label}:")
-                    if new_value:
-                        self.value = new_value
+                    self.value = self.get_user_text(f"Enter new {self.label}:")
                 elif self.type == "color":
-                    new_value = self.get_user_color(f"Enter new {self.label}:")
-                    if new_value:
-                        self.value = new_value
+                    self.value = self.get_user_color(f"Enter new {self.label}:")
                 else:
                     return False
                 return True
@@ -131,7 +127,7 @@ class Property:
 
     def get_user_text(self, prompt):
         pygame.display.set_caption(prompt)
-        user_input = self.value
+        user_input = ""
         input_active = True
 
         while input_active:
@@ -315,7 +311,7 @@ class App:
 
         match label:
             case "Effect":
-                self.buttons[label] = Property("Effect", "QuantumBlurFull",type = "text")
+                self.buttons[label] = Property("Effect", "QuantumBlur",type = "text")
                 self.add2shelf(0,self.buttons[label])
             case "Brush":
                 self.buttons[label] = Property("Brush", "Brush", type="title")
@@ -337,6 +333,9 @@ class App:
                 self.add2shelf(0, self.buttons[label])
             case "Status":
                 self.buttons[label] = Property("Status", True, type="toggle")
+                self.add2shelf(1, self.buttons[label])
+            case "Clear":
+                self.buttons[label] = Property("Clear", False, type="once")
                 self.add2shelf(1, self.buttons[label])
             case "Run":
                 self.buttons[label] = Property("Run", False, type="once")
@@ -404,13 +403,16 @@ class App:
                             case "Export":
                                 self.canvas.export_image()
                                 self.buttons["Export"].value = False
+                            case "Clear":
+                                self.brush.reset()
+                                self.buttons["Export"].value = False
 
                         event_handled = True
 
                 if not event_handled:
                     self.brush.handle_event(event)
 
-            self.brush.update()
+            #self.brush.update()
 
             self.screen.fill(BACK_COLOR)
 

@@ -81,13 +81,13 @@ class QuantumBlurFull(BaseEffect):
 
     def build(self):
         #TODO: Check if everything is in the correct format
-        #color = pygame.Color(self.parameters["Color"])
-        #color = [color.r,color.g,color.b]
         color = self.parameters["Color"]
         self.image = np.array(self.parameters["Image"])
         self.strength = float(self.parameters["Strength"])
         self.lcolor = np.array(mixbox.rgb_to_latent(color))
         self.latent_image = np.apply_along_axis(rgb2l, axis=-1, arr=self.image)
+        self.points = interpolate_pixels(self.parameters["Points"])
+        self.radius = int(self.parameters["Radius"])
 
     def apply(self):
         mix = np.array([[extract_weight(c, self.lcolor) for c in row] for row in self.latent_image])
@@ -95,11 +95,18 @@ class QuantumBlurFull(BaseEffect):
         comp_color = np.array([[(self.latent_image[i, j] - mix[i, j] * self.lcolor) / (1 - mix[i, j]) if mix[i, j] < 1 else self.lcolor
                                 for j in range(mix.shape[1])] for i in range(mix.shape[0])])
 
-        max_h = np.max(mix)
-        qc = height2circuit(array2height(mix))
-        partial_x(qc, self.strength)
-        new_mix = height2array(circuit2height(qc))[..., np.newaxis]*max_h
+        cut_mix = np.array([mix[x,y-self.radius:y+self.radius+1] for x,y in self.points])
 
+        max_h = np.max(cut_mix)
+        qc = height2circuit(array2height(cut_mix))
+        partial_x(qc, self.strength)
+        new_cut_mix = height2array(circuit2height(qc))*max_h
+
+        new_mix = mix * 1.
+        for i,val in enumerate(new_cut_mix):
+            x,y = self.points[i]
+            new_mix[x,y-self.radius:y+self.radius+1] = val
+        new_mix=new_mix[...,np.newaxis]
         new_latent_image = comp_color * (1 - new_mix) + new_mix * self.lcolor[np.newaxis, np.newaxis, :]
 
         self.new_image = np.apply_along_axis(l2rgb, axis=-1, arr=new_latent_image)

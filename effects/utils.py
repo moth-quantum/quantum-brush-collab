@@ -8,6 +8,33 @@ from scipy.linalg import fractional_matrix_power
 from PIL.Image import new as newimage, Image
 #Quantum blur stuff
 
+def interpolate_pixels(pixel_list):
+    if not pixel_list:
+        return []
+
+    # Remove consecutive duplicate pixels
+    filtered_pixels = [pixel_list[0]]
+    for px in pixel_list[1:]:
+        if px != filtered_pixels[-1]:
+            filtered_pixels.append(px)
+
+    # Extract x and y coordinates
+    x_coords, y_coords = zip(*filtered_pixels)
+
+    # Create simple integer interpolation
+    interpolated_pixels = []
+    for i in range(len(x_coords) - 1):
+        x1, y1 = x_coords[i], y_coords[i]
+        x2, y2 = x_coords[i + 1], y_coords[i + 1]
+
+        if x1 == x2:  # Vertical line
+            for y in range(min(y1, y2), max(y1, y2) + 1):
+                interpolated_pixels.append((x1, y))
+        else:  # Horizontal or diagonal line
+            for x in range(min(x1, x2), max(x1, x2) + 1):
+                y = round(y1 + (y2 - y1) * (x - x1) / (x2 - x1))
+                interpolated_pixels.append((x, y))
+    return interpolated_pixels
 
 def _kron(vec0, vec1):
     """
