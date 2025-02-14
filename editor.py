@@ -18,7 +18,7 @@ REQUIREMENTS = ["File","Brush","Effect","Run","Undo","Export"]
 
 # Initialize pygame
 pygame.init()
-
+clock = pygame.time.Clock()
 FONT = pygame.font.Font(None, FONT_SIZE)
 
 class Property:
@@ -371,6 +371,7 @@ class App:
 
     def run(self):
         while self.running:
+            clock.tick(90)
             mouse_pos = pygame.mouse.get_pos()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
