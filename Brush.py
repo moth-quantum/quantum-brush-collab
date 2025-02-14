@@ -80,16 +80,17 @@ class Brush:
         mask = np.zeros(alpha_array.shape, dtype=np.uint8)
         path = rescale_coordinates(canvas.image_rect, self.brush_path)
 
-        for x,y in interpolate_points(path,100):
+        for x,y in interpolate_pixels(path):
             mask = apply_circle(mask,x,y,radius)
 
         # Crop the mask
         mask = mask.astype(bool)
         cropped_mask = mask[box_left:box_right+1,box_top:box_bottom+1]
+        inter_points = interpolate_pixels([(point[0] - box_left, point[1]-box_top) for point in path])
 
         effect_params = {"Image": cropped_image,
                          "Mask": cropped_mask,
-                         "Points": [(point[0] - box_left, point[1]-box_top) for point in path],
+                         "Points": inter_points,
                          "Radius": radius}
         effect_params |= {prop: self.properties[prop].value for prop in self.properties}
 

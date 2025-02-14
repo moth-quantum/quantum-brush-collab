@@ -113,7 +113,6 @@ class QuantumBlurFull(BaseEffect):
             else:
                 new_mix[x - self.radius:x + self.radius + 1,y] = val
 
-        print(np.abs(cut_mix-new_cut_mix))
         new_mix=new_mix[...,np.newaxis]
         new_latent_image = comp_color * (1 - new_mix) + new_mix * self.lcolor[np.newaxis, np.newaxis, :]
 
