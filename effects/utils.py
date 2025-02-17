@@ -9,33 +9,84 @@ from qiskit import QuantumCircuit, quantum_info
 from qiskit_aer import AerSimulator
 from qiskit_aer.library import SaveStatevectorDict
 
-def interpolate_pixels(pixel_list):
-    if not pixel_list:
-        return []
 
-    # Remove consecutive duplicate pixels
-    filtered_pixels = [pixel_list[0]]
-    for px in pixel_list[1:]:
-        if px != filtered_pixels[-1]:
-            filtered_pixels.append(px)
+# this is overwritten by the PIL class if available
+class Image():
+    """
+    A minimal reimplementation of the the PIL Image.Image class, to allow all
+    image based tools to function even when only the standard library is
+    available.
 
-    # Extract x and y coordinates
-    x_coords, y_coords = zip(*filtered_pixels)
+    To initialize an Image oject, use the `newimage` function.
 
-    # Create simple integer interpolation
-    interpolated_pixels = []
-    for i in range(len(x_coords) - 1):
-        x1, y1 = x_coords[i], y_coords[i]
-        x2, y2 = x_coords[i + 1], y_coords[i + 1]
+    Attributes:
+        mode (str): If L, pixel values are a single integer. If 'RGB', they
+            are a tuple of three integers.
+        size (tuple): Specifies width and height.
+    """
 
-        if x1 == x2:  # Vertical line
-            for y in range(min(y1, y2), max(y1, y2) + 1):
-                interpolated_pixels.append((x1, y))
-        else:  # Horizontal or diagonal line
-            for x in range(min(x1, x2), max(x1, x2) + 1):
-                y = round(y1 + (y2 - y1) * (x - x1) / (x2 - x1))
-                interpolated_pixels.append((x, y))
-    return interpolated_pixels
+    def __init__(self):
+        self.mode = None
+        self.size = None
+        self._image_dict = None
+
+    def getpixel(self, xy):
+        """
+        Returns pixel value at the given coordinate.
+        """
+        return self._image_dict[xy]
+
+    def putpixel(self, xy, value):
+        """
+        Sets the pixel value at the given coordinate.
+        """
+        self._image_dict[xy] = value
+
+    def todict(self):
+        """
+        Returns dictionary of pixel values with coordinates as keys.
+        Not present in PIL version.
+        """
+        return self._image_dict
+
+    def show(self):
+        """
+        If the PIL version of this class is used, this function creates a PNG
+        image and displays it. This version instead simply prints all
+        coordinates and pixel values.
+        """
+        for x in range(self.size[0]):
+            for y in range(self.size[1]):
+                print('(' + str(x) + ',' + str(y) + ')' + ': ' + str(self._image_dict[x, y]))
+
+    def resize(self, new_size, method):
+        print("This functionality has not been implemented.")
+
+
+# this is overwritten by the PIL function if available
+def newimage(mode, size):
+    """
+    A minimal reimplementation of the the PIL Image.new function.
+    Creates an Image object for the given mode and size.
+    """
+    img = Image()
+    img.mode = mode
+    img.size = size
+    if mode == 'L':
+        blank = 0
+    elif mode == 'RGB':
+        blank = (0, 0, 0)
+    img._image_dict = {(x, y): blank \
+                       for x in range(size[0]) \
+                       for y in range(size[1])}
+    return img
+
+
+# if external libraries can be used, import the ones we need
+if not simple_python:
+    import numpy as np
+    from scipy.linalg import fractional_matrix_power
+    from PIL.Image import new as newimage, Image
 
 
 def _kron(vec0, vec1):
@@ -70,10 +121,10 @@ def circuit2probs(qc):
     else:
         qc_run = qc.copy()
         qc_run.append(SaveStatevectorDict(qc.num_qubits), qc.qregs[0])
-        rawprobs = AerSimulator().run(qc_run, shots=1).result().data()['statevector_dict']
+        rawamps = AerSimulator().run(qc_run, shots=1).result().data()['statevector_dict']
         probs = {}
-        for string, prob in rawprobs.items():
-            probs[str(bin(int(string, 16))[2::].zfill(qc.num_qubits))] = np.real(prob)
+        for string, amp in rawamps.items():
+            probs[str(bin(int(string, 16))[2::].zfill(qc.num_qubits))] = np.abs(amp) ** 2
 
     return probs
 

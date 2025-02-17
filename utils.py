@@ -22,32 +22,51 @@ def apply_mask(array, mask):
     return array
 
 
+def bresenham_line(x1, y1, x2, y2):
+    points = []
+
+    dx = abs(x2 - x1)
+    dy = abs(y2 - y1)
+
+    sx = 1 if x2 > x1 else -1
+    sy = 1 if y2 > y1 else -1
+
+    if dx > dy:
+        err = dx / 2.0
+        while x1 != x2:
+            points.append((x1, y1))
+            err -= dy
+            if err < 0:
+                y1 += sy
+                err += dx
+            x1 += sx
+    else:
+        err = dy / 2.0
+        while y1 != y2:
+            points.append((x1, y1))
+            err -= dx
+            if err < 0:
+                x1 += sx
+                err += dy
+            y1 += sy
+
+    points.append((x2, y2))  # Add the last point
+    return points
+
+
 def interpolate_pixels(pixel_list):
     if not pixel_list:
         return []
 
+    interpolated_pixels = [pixel_list[0]]
     # Remove consecutive duplicate pixels
-    filtered_pixels = [pixel_list[0]]
+    last = pixel_list[0]
     for px in pixel_list[1:]:
-        if px != filtered_pixels[-1]:
-            filtered_pixels.append(px)
+        if px != last:
+            new_px = bresenham_line(*last,*px)
+            interpolated_pixels.extend(new_px[1:])
+            last = px
 
-    # Extract x and y coordinates
-    x_coords, y_coords = zip(*filtered_pixels)
-
-    # Create simple integer interpolation
-    interpolated_pixels = []
-    for i in range(len(x_coords) - 1):
-        x1, y1 = x_coords[i], y_coords[i]
-        x2, y2 = x_coords[i + 1], y_coords[i + 1]
-
-        if x1 == x2:  # Vertical line
-            for y in range(min(y1, y2), max(y1, y2) + 1):
-                interpolated_pixels.append((x1, y))
-        else:  # Horizontal or diagonal line
-            for x in range(min(x1, x2), max(x1, x2) + 1):
-                y = round(y1 + (y2 - y1) * (x - x1) / (x2 - x1))
-                interpolated_pixels.append((x, y))
     return interpolated_pixels
 
 

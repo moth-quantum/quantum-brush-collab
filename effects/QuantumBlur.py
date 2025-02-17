@@ -100,12 +100,10 @@ class QuantumBlurFull(BaseEffect):
         else:
             cut_mix = np.array([mix[x - self.radius:x + self.radius + 1,y] for x, y in self.points])
 
-        print(np.max(cut_mix/np.max(cut_mix), axis=0))
         max_h = np.max(cut_mix)
         qc = height2circuit(array2height(cut_mix))
-        print(np.max(height2array(circuit2height(qc)),axis=0))
         partial_x(qc, self.strength)
-        new_cut_mix = (height2array(circuit2height(qc))**2)*max_h
+        new_cut_mix = (height2array(circuit2height(qc)))*max_h
 
         new_mix = mix * 1.
         for i,val in enumerate(new_cut_mix):
