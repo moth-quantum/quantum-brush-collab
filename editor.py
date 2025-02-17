@@ -326,7 +326,7 @@ class App:
                 self.buttons[label] = Property("Strength", 0.5, type="text")
                 self.add2shelf(2, self.buttons[label])
             case "File":
-                self.buttons[label] = Property("File", "images/atlas.png",type="title")
+                self.buttons[label] = Property("File", "images/tiger.png",type="title")
                 self.add2shelf(0, self.buttons[label])
             case "Undo":
                 self.buttons[label] = Property("Undo", False, type="once")

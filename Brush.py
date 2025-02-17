@@ -79,14 +79,15 @@ class Brush:
         radius = int(self.properties["Radius"].value)
         mask = np.zeros(alpha_array.shape, dtype=np.uint8)
         path = rescale_coordinates(canvas.image_rect, self.brush_path)
+        path = interpolate_pixels(path)
 
-        for x,y in interpolate_pixels(path):
+        for x,y in path:
             mask = apply_circle(mask,x,y,radius)
 
         # Crop the mask
         mask = mask.astype(bool)
         cropped_mask = mask[box_left:box_right+1,box_top:box_bottom+1]
-        inter_points = interpolate_pixels([(point[0] - box_left, point[1]-box_top) for point in path])
+        inter_points = [(point[0] - box_left, point[1]-box_top) for point in path]
 
         effect_params = {"Image": cropped_image,
                          "Mask": cropped_mask,
@@ -100,9 +101,11 @@ class Brush:
             pickle.dump(effect_params, f)
 
         effect_path = "effects/" + effect + ".py"
-        sp = subprocess.run(['python', effect_path,effect_id], capture_output=True, text=True)
-        print(sp.stdout)
-        print(sp.stderr)
+        try:
+            sp = subprocess.run(['python', effect_path,effect_id], capture_output=True, text=True,check=True)
+        except:
+            return None
+
         with open("temp/image_"+effect_id+".pkl", 'rb') as f:
             updated_image = pickle.load(f)
 
