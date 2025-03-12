@@ -10,7 +10,7 @@ from PIL import Image
 #List of brush-specific requirements
 REQUIREMENTS = ["Clear","Radius"]
 
-class Brush:
+class SmoothBrush:
     def __init__(self, *properties):
         self.label = "Normal Brush"
         self.properties = {property.label: property for property in properties}
