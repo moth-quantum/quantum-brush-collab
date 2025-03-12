@@ -11,7 +11,7 @@ import pygame
 
 from config import *
 from utils import *
-from Brush import Brush
+#from SmoothBrush import Brush
 import importlib
 
 REQUIREMENTS = ["File","Brush","Effect","Run","Undo","Export"]
@@ -311,10 +311,10 @@ class App:
 
         match label:
             case "Effect":
-                self.buttons[label] = Property("Effect", "QuantumBlur",type = "text")
+                self.buttons[label] = Property("Effect", "Clone",type = "text")
                 self.add2shelf(0,self.buttons[label])
             case "Brush":
-                self.buttons[label] = Property("Brush", "Brush", type="title")
+                self.buttons[label] = Property("Brush", "DiscreteBrush", type="title")
                 self.add2shelf(0, self.buttons[label])
             case "Color":
                 self.buttons[label] = Property("Color", (255,255,255),type = "color")
