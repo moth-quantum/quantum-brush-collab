@@ -274,10 +274,12 @@ class App:
         self.shelves[1] = 0
 
         self.brush_req = brush.REQUIREMENTS
+
         for req in self.brush_req:
             self.add_button(req, True)
 
         self.brush = getattr(brush, self.buttons["Brush"].value)(*(self.buttons[k] for k in self.brush_req))
+        self.add_effect()
         return self.brush
 
     def add_effect(self):
@@ -311,10 +313,10 @@ class App:
 
         match label:
             case "Effect":
-                self.buttons[label] = Property("Effect", "Clone",type = "text")
+                self.buttons[label] = Property("Effect", "Mixing",type = "text")
                 self.add2shelf(0,self.buttons[label])
             case "Brush":
-                self.buttons[label] = Property("Brush", "DiscreteBrush", type="title")
+                self.buttons[label] = Property("Brush", "SmoothBrush", type="title")
                 self.add2shelf(0, self.buttons[label])
             case "Color":
                 self.buttons[label] = Property("Color", (255,255,255),type = "color")
