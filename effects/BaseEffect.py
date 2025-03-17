@@ -22,6 +22,7 @@ class BaseEffect:
 
         for req in self.requirements:
             if req not in self.parameters.keys():
+                print(self.parameters)
                 raise KeyError(req + " was not provided.")
 
     def export_job(self,job_id):

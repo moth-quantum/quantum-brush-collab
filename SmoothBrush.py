@@ -104,6 +104,7 @@ class SmoothBrush:
         try:
             sp = subprocess.run(['python', effect_path,effect_id], capture_output=True, text=True,check=True)
         except:
+            print("Effect failed")
             return None
 
         with open("temp/image_"+effect_id+".pkl", 'rb') as f:
