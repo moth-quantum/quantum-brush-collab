@@ -41,18 +41,24 @@ def U(m,n):
     return ret
 
 def prep(s0,s1): #s0 is the final state and s1 is the initial state
-    assert s0**2 + s1**2 + s0*s1 - s0 -s1 <= 0, "Coefs but satisfy the ellipse inequality"
+    assert s0**2 + s1**2 + s0*s1 - s0 -s1 <= 0, "Coefs must satisfy the ellipse inequality"
     return StatePreparation([np.sqrt((s0 + s1) / 2), np.sqrt((1 - s0) / 2), 0, np.sqrt((1 - s1) / 2)])
 
 
-def ua_cloning(n_steps,ang):
+def ua_cloning(n_steps,ang, s0=2/3,s1=2/3):
+    '''
+    Asymmetric universal cloning (same as the symetric case for default values)
+    :param n_steps: Number of steps to repeat the cloning
+    :param ang: Angle of the qubit to be cloned
+    :return:
+    '''
     n_qubits = 2 * n_steps - 1
     qc = QuantumCircuit(n_qubits)
 
     # Rotate the first qubit to encode the image
     qc.ry(ang,0)
 
-    PG = prep(0.9,0.1)
+    PG = prep(s0,s1)
 
     # Creating the bell states
     for i in range(1, n_qubits, 2):
@@ -84,52 +90,6 @@ def ua_cloning(n_steps,ang):
 
     return np.arccos(exp)
 
-def us_cloning(n_steps,ang):
-    n_qubits = 2 * n_steps - 1
-    print(n_qubits)
-    qc = QuantumCircuit(n_qubits)
-
-    #Rotate the first qubit to encode the image
-    qc.ry(ang,0)
-
-    t1 = - np.arccos(np.sqrt(0.5-1/2/np.sqrt(5)))
-    t2 = np.arccos((np.sqrt(5)-1)/2/np.sqrt(3))
-    t3 = -np.arccos(np.sqrt(0.5-1/np.sqrt(5)))
-
-    #Creating the bell states
-    for i in range(1,n_qubits,2):
-        qc.ry(-2*t1, i+1)
-        qc.cx(i+1,i)
-        qc.ry(-2*t2,i)
-        qc.cx( i ,i+1)
-        qc.ry(-2*t3,i+1)
-
-    ps = []
-    for i in range(0,n_qubits-1,2):
-        qc.cx(i,i+2)
-        qc.cx(i,i+1)
-        qc.cx(i+2,i)
-        qc.cx(i+1,i)
-
-        idd = ["I"] * n_qubits
-        idd[i]="Z"
-        ps.append("".join(idd))
-
-    idd = ["I"] * n_qubits
-    idd[-1] = "Z"
-    ps.append("".join(idd))
-
-    svec = Statevector(qc)
-
-    exp = []
-    for s in ps:
-        op = Pauli(s)
-        exp.append(svec.expectation_value(op))
-
-    exp = np.array(exp)
-    return np.arccos(exp)
-
-
 class Clone(BaseEffect):
     def __init__(self,job_id=None):
         super().__init__()
@@ -144,6 +104,7 @@ class Clone(BaseEffect):
         self.strength = float(self.parameters["Strength"])
         self.points = self.parameters["Points"]
         self.radius = int(self.parameters["Radius"])
+        self.qbits = 3
 
     def apply(self):
         self.new_image = self.image + 0.
@@ -159,11 +120,11 @@ class Clone(BaseEffect):
             ss = np.std(s)
 
             angles = np.pi/(1+np.exp(-(s-ms)/ss))
+
             new_angles = []
             for j,a in enumerate(angles):
-                if j <3 :
+                if j >27 :
                     new_angle = ua_cloning(len(self.points),a)
-                    print(new_angle,a)
                     new_angles.append(new_angle)
                 else:
                     new_angles.append([a]*len(self.points))
@@ -182,6 +143,7 @@ class Clone(BaseEffect):
         return self.new_image
 
 if __name__ == "__main__":
+    #Clone("6548849747199723393")
     # Ensure at least one argument is passed
     if len(sys.argv) < 2:
         print("Please provide an ID as a command-line argument.")

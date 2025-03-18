@@ -66,7 +66,7 @@ class Mixing(BaseEffect):
             for g in range(n_gates):
                 # Apply the effect here: change the gate for something else
                 for q in range(n_qubits):
-                    qc.cry(angles[g,p,q],q,np.mod(q+1,n_qubits))
+                    qc.cry(angles[g,p,q],control_qubit=np.mod(q+1,n_qubits),target_qubit=q)
                     #qc.cx(q,np.mod(q+1,n_qubits))
 
                 expect_z = np.clip(measure_pauli(qc),-1,1)[::-1]
@@ -83,7 +83,7 @@ class Mixing(BaseEffect):
         new_latent_image = self.latent_image + 0
 
         new_cut = self.circuit(cut)
-        print(new_cut[:,0,:4])
+
         for i,val in enumerate(new_cut):
             x,y = self.points[i]
             if self.vertical:
@@ -96,7 +96,7 @@ class Mixing(BaseEffect):
         return self.new_image
 
 if __name__ == "__main__":
-    Mixing("6104001010544694362")
+    #Mixing("6104001010544694362")
     # Ensure at least one argument is passed
     if len(sys.argv) < 2:
         print("Please provide an ID as a command-line argument.")
