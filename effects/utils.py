@@ -9,6 +9,46 @@ from qiskit import QuantumCircuit, quantum_info
 from qiskit_aer import AerSimulator
 from qiskit_aer.library import SaveStatevectorDict
 
+def expectation_zzz(counts, shots, z_index_list=None):
+    """
+    :param shots: shots of the experiment
+    :param counts: counts obtained from Qiskit's Result.get_counts()
+    :param z_index_list: a list of indexes
+    :return: the expectation value of ZZ...Z operator for given z_index_list
+    """
+
+    if z_index_list is None:
+        z_counts = counts
+    else:
+        z_counts = cut_counts(counts, z_index_list)
+
+    expectation = 0
+    for key in z_counts:
+        sign = -1
+        if key.count('1') % 2 == 0:
+            sign = 1
+        expectation += sign * z_counts[key] / shots
+
+    return expectation
+
+def cut_counts(counts, bit_indexes):
+    """
+    :param counts: counts obtained from Qiskit's Result.get_counts()
+    :param bit_indexes: a list of indexes
+    :return: new_counts for the  specified bit_indexes
+    """
+    bit_indexes.sort(reverse=True)
+    new_counts = {}
+    for key in counts:
+        new_key = ''
+        for index in bit_indexes:
+            new_key += key[-1 - index]
+        if new_key in new_counts:
+            new_counts[new_key] += counts[key]
+        else:
+            new_counts[new_key] = counts[key]
+
+    return new_counts
 
 # this is overwritten by the PIL class if available
 class Image():
