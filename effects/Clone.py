@@ -40,12 +40,17 @@ def U(m,n):
 
     return ret
 
-def prep(s0,s1): #s0 is the final state and s1 is the initial state
-    assert s0**2 + s1**2 + s0*s1 - s0 -s1 <= 0, "Coefs must satisfy the ellipse inequality"
+def prep(s0,s1=None): #s0 is the final state and s1 is the initial state
+    if s1 is None:
+        s1 = 0.5 * (np.sqrt(-3 * s0**2 + 2 * s0 + 1) - s0 + 1)
+        s1 = np.clip(s1,0,1)
+        #print(f"s0 {s0}")
+        #print(f"s1 {s1}")
+    assert s0**2 + s1**2 + s0*s1 - s0 -s1 <= 10**(-10), "Coefs must satisfy the ellipse inequality"
     return StatePreparation([np.sqrt((s0 + s1) / 2), np.sqrt((1 - s0) / 2), 0, np.sqrt((1 - s1) / 2)])
 
 
-def ua_cloning(n_steps,ang, s0=2/3,s1=2/3):
+def ua_cloning(n_steps,ang, s0=2/3):
     '''
     Asymmetric universal cloning (same as the symetric case for default values)
     :param n_steps: Number of steps to repeat the cloning
@@ -58,8 +63,7 @@ def ua_cloning(n_steps,ang, s0=2/3,s1=2/3):
     # Rotate the first qubit to encode the image
     qc.ry(ang,0)
 
-    PG = prep(s0,s1)
-
+    PG = prep(s0)
     # Creating the bell states
     for i in range(1, n_qubits, 2):
         qc.append(PG, [i, i + 1])
@@ -104,10 +108,11 @@ class Clone(BaseEffect):
         self.strength = float(self.parameters["Strength"])
         self.points = self.parameters["Points"]
         self.radius = int(self.parameters["Radius"])
-        self.qbits = 3
+
 
     def apply(self):
         self.new_image = self.image + 0.
+        n_points = len(self.points)
 
         for i in range(3):
             x0, y0 = self.points[0]
@@ -116,23 +121,23 @@ class Clone(BaseEffect):
 
             copy = self.image[sx,sy,i]
             u,s,v = svd(copy)
-            ms = np.mean(s)
-            ss = np.std(s)
+            mls = np.mean(np.log(s))
+            sls = np.std(np.log(s))
 
-            angles = np.pi/(1+np.exp(-(s-ms)/ss))
+            angles = np.pi/(1+np.exp(-(np.log(s)-mls)*2/sls))
 
             new_angles = []
             for j,a in enumerate(angles):
-                if j >27 :
-                    new_angle = ua_cloning(len(self.points),a)
+                if j>=1:
+                    new_angle = ua_cloning(n_points,a,self.strength)
                     new_angles.append(new_angle)
                 else:
-                    new_angles.append([a]*len(self.points))
+                    new_angles.append([a]*n_points)
 
             new_angles = np.array(new_angles)
 
-            new_s = ms - ss * np.log(np.pi/new_angles -1)
-
+            new_s = np.exp(mls - sls * np.log(np.pi/new_angles -1)/2)
+            new_s[0] = s[0]
             for p in range(len(self.points)):
                 x,y = self.points[p]
                 sx = slice(x-self.radius,x+self.radius+1)
@@ -143,7 +148,8 @@ class Clone(BaseEffect):
         return self.new_image
 
 if __name__ == "__main__":
-    #Clone("6548849747199723393")
+
+    #Clone("97228449563405973")
     # Ensure at least one argument is passed
     if len(sys.argv) < 2:
         print("Please provide an ID as a command-line argument.")
