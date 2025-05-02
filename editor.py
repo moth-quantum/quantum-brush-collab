@@ -6,7 +6,6 @@ import pickle
 import shutil
 from copy import copy, deepcopy
 from email.policy import default
-
 import pygame
 
 from config import *
@@ -285,7 +284,8 @@ class App:
     def add_effect(self):
         try:
             effect = importlib.import_module(self.buttons["Effect"].value)
-        except ModuleNotFoundError:
+        except ModuleNotFoundError as e:
+            print(e)
             print(f"Could not find effect {self.buttons["Effect"].value}.")
             self.buttons["Effect"].reset()
             return None

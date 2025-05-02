@@ -1,43 +1,24 @@
 import sys
 import os
 import numpy as np
-import mixbox
-import pygame
-# from mixbox import rgb_to_latent, latent_to_rgb
 from BaseEffect import BaseEffect
 import sys
 from utils import *
-from qiskit.quantum_info import Statevector,Pauli
+from qiskit.quantum_info import Statevector, Pauli, SparsePauliOp
+from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, generate_preset_pass_manager
 from qiskit_ibm_runtime.fake_provider import FakeTorino
 from qiskit_ibm_runtime import EstimatorV2 as Estimator
+
+
 backend=FakeTorino()
 
 #List of effect-specific requirements
-REQUIREMENTS = ["Image","Color","Orientation"]
-
-# rgb2l = lambda x: rgb_to_latent(list(x))
-# l2rgb = lambda x: latent_to_rgb(list(x))
-
-# def partial_x(qc, fraction):
-#     for j in range(qc.num_qubits):
-#         qc.rx(np.pi * fraction/2, j)
-
-# def measure_pauli(qc, pauli = "Z"):
-#     num_qubits = qc.num_qubits
-#     svec = Statevector(qc)
-
-    # ret = []
-    # for q in range(num_qubits):
-    #     idd = ["I"] * num_qubits
-    #     idd[q] = pauli
-    #     ret.append(svec.expectation_value(Pauli("".join(idd))))
-
-    # return np.array(ret)
+REQUIREMENTS = ["Image","Color","Strength","Orientation"]
 
 class Heisenbrush(BaseEffect):
     def __init__(self,job_id=None):
         super().__init__()
-        self.label = "Quantum Heisenberg"
+        self.label = "Quantum Heisenberg Effect"
         self.requirements = REQUIREMENTS
         if job_id:
             self.run_job(job_id)
@@ -46,14 +27,14 @@ class Heisenbrush(BaseEffect):
         #TODO: Check if everything is in the correct format
         color = self.parameters["Color"]
         self.image = np.array(self.parameters["Image"])
-        # self.strength = float(self.parameters["Strength"])
+        self.strength = float(self.parameters["Strength"])
         # self.lcolor = np.array(mixbox.rgb_to_latent(color))
         # self.latent_image = np.apply_along_axis(rgb2l, axis=-1, arr=self.image)
         self.points = self.parameters["Points"]
         self.radius = int(self.parameters["Radius"])
         self.vertical = (self.parameters["Orientation"] == "vertical")
 
-    def numbers_to_rgb_colors(numbers):
+    def numbers_to_rgb_colors(self,numbers):
         """
         Convert a list of numbers between 0 and 1 into RGB values.
         For each number, first 2 digits after decimal become R, second 2 become G, third 2 become B.
@@ -201,16 +182,12 @@ class Heisenbrush(BaseEffect):
         q = QuantumRegister(n_qubits)
         circ_dt = QuantumCircuit(q)
 
-        n_eo_list = list(range(0, n_qubits-((n_qubits+1)%2), 2)) + list(range(1, n_qubits-(n_qubits%2), 2))
-
-        for n in n_eo_list:
+        for n in range(n_qubits-1):
             J = J_list[n]
             ##  exp(-it * J * (X_n X_{n+1} + Y_n Y_{n+1} + Z_n Z_{n+1}))
             circ_dt.rxx(2*J*dt, q[n], q[(n+1)%n_qubits])
             circ_dt.ryy(2*J*dt, q[n], q[(n+1)%n_qubits])
             circ_dt.rzz(2*J*dt, q[n], q[(n+1)%n_qubits])
-
-
 
         for n in range(n_qubits):
             ##  exp(-it * hx[n] * X_n) exp(-it * hz[n] * Z_n)
@@ -219,50 +196,28 @@ class Heisenbrush(BaseEffect):
 
         return circ_dt
 
-#***********************************************************************
-
-    # def circuit(self,image):
-    #     angles = self.strength * (image - self.lcolor) * np.pi
-    #     n_gates, n_pixels, n_qubits =  angles.shape
-    #     n_qubits -= 3 # Remove RGB residuals
-    #     new_image = image + 0
-
-    #     for p in range(n_pixels):
-    #         qc = QuantumCircuit(n_qubits)
-    #         #Prepare initial state to color
-    #         for q in range(n_qubits):
-    #             qc.ry(self.lcolor[q] * np.pi,q)
-
-    #         #Go gate by gate and get the new state
-    #         for g in range(n_gates):
-    #             # Apply the effect here: change the gate for something else
-    #             for q in range(n_qubits):
-    #                 qc.cry(angles[g,p,q],control_qubit=np.mod(q+1,n_qubits),target_qubit=q)
-    #                 #qc.cx(q,np.mod(q+1,n_qubits))
-
-    #             expect_z = np.clip(measure_pauli(qc),-1,1)[::-1]
-    #             new_image[g,p,:n_qubits] = np.arccos(expect_z) / np.pi
-
-    #     return new_image
-
-    def run_hardware(self, image):
+    def run_hardware(self,dt_list):
         # Backend
         estimator = Estimator(backend)
 
-        nsteps=13  ### total time steps
-        dtlist=np.array([0.1]*5+[1]*1+[0.1]*5+[1]*2)
+        nsteps = len(dt_list)
+        #Hardcoding all the parameters for now
+        n_qubits = 5
+        J_list = [1 for _ in range(n_qubits-1)]
+        hz_list = [1 for _ in range(n_qubits)]
+        hx_list = [1 for _ in range(n_qubits)]
 
         circuits=[]
         circ = QuantumCircuit(n_qubits)
         ### start time evolution
-        for step,dt in zip(range(nsteps),dtlist):
+        for step,dt in zip(range(nsteps),dt_list):
             print('step: ', step)
-            circ_dt = time_evolution_Heisenberg(n_qubits, J_list, hz_list, hx_list, dt)
+            circ_dt = self.time_evolution_Heisenberg(n_qubits, J_list, hz_list, hx_list, dt)
             circ = circ.compose(circ_dt)
             circuits.append(circ.copy())
 
         # Create the Hamiltonian
-        hamiltonian = create_heisenberg_hamiltonian(n_qubits, J_list, hz_list, hx_list)
+        hamiltonian = self.create_heisenberg_hamiltonian(n_qubits, J_list, hz_list, hx_list)
         observables = [hamiltonian]*len(circuits)
 
         # Get ISA circuits
@@ -286,39 +241,39 @@ class Heisenbrush(BaseEffect):
         values=np.abs((np.array(values)/sum(np.array(values))))
 
         # Normalize RGB values to [0, 1]
-        return numbers_to_rgb_colors(values)
+        return self.numbers_to_rgb_colors(values)
 
 
     def apply(self):
-        if self.vertical:
-            cut = np.array([self.image[x,y-self.radius:y+self.radius+1] for x,y in self.points])
-        else:
-            cut = np.array([self.image[x - self.radius:x + self.radius + 1,y] for x, y in self.points])
+        #Convert the list of points into differences (and normalize them the strength)
+        distances = []
+        last_x,last_y = self.points[0]
+        for x,y in self.points[1:]:
+            distances.append( np.sqrt((x-last_x)**2 + (y-last_y)**2) )
+            last_x = x
+            last_y = y
 
-        new_image = self.image + 0
-        # values= reshape (values, final_size=cut.shape)
+        distances = self.strength * np.array(distances)/max(distances)
+        #Run the algorithm to obtain the new colors
+        new_colors = self.run_hardware(distances)
 
-        values= self.run_hardware(cut)
+        #Apply the new colors directly onto the new image:
+        self.new_image = self.image + 0
 
-        new_cut = values.reshape(cut.shape)
+        inter_points = interpolate_pixels(self.points)
+        color_counter = 0
+        for x,y in inter_points:
+            color = np.array(new_colors[color_counter])
 
-        #distance between the points(self.points) and the center of the image
+            self.new_image[x - self.radius:x + self.radius + 1, y - self.radius:y + self.radius + 1] = color
 
-        ###### shape new_image=(npixels row, n pixels column, 3 channels) check that is the same as input
-
-        for i,val in enumerate(new_cut):
-            x,y = self.points[i]
-            if self.vertical:
-                new_image[x,y-self.radius:y+self.radius+1] = val
-            else:
-                new_image[x - self.radius:x + self.radius + 1,y] = val
-
-        self.new_image = np.apply_along_axis(l2rgb, axis=-1, arr=new_image)
+            if (x,y) == self.points[color_counter+1]:
+                color_counter +=1
 
         return self.new_image
 
 if __name__ == "__main__":
-    #Heisenbrush("6104001010544694362")
+    #Heisenbrush("3195284272937975157")
     # Ensure at least one argument is passed
     if len(sys.argv) < 2:
         print("Please provide an ID as a command-line argument.")
