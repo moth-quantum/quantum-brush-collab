@@ -98,11 +98,17 @@ class DiscreteBrush:
             pickle.dump(effect_params, f)
 
         effect_path = "effects/" + effect + ".py"
-        try:
-            sp = subprocess.run(['python', effect_path,effect_id], capture_output=True, text=True,check=False)
-            print(sp.stdout)
-        except:
-            print("Failed to apply effect")
+
+        sp = subprocess.run(['python', effect_path, effect_id], capture_output=True, text=True, check=False)
+
+        print("Output:")
+        print(sp.stdout)
+
+        if sp.returncode != 0:
+            print("Subprocess failed with return code", sp.returncode)
+            print("Error output:")
+            print(sp.stderr)
+
             return None
 
         with open("temp/image_"+effect_id+".pkl", 'rb') as f:
