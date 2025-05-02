@@ -64,12 +64,14 @@ class Drop(BaseEffect):
                 i_canvas = np.pi * cut[:,p,c] / 255.
                 qc = QuantumCircuit(n_qubits + 1)
                 qc.ry(i_brush,0)
-                rot = self.strength * (i_canvas - i_brush)
+
+                rot = self.strength * (i_brush - i_canvas)
 
                 for q in range(1,n_qubits+1):
                     qc.ry(i_canvas[q-1], q)
+
                     qc.cx(0,q)
-                    qc.rx(rot[q-1],0)
+                    qc.ry(rot[q-1],0,q)
                     qc.cx(0,q)
 
                 z_val = measure_pauli(qc,method="matrix_product_state")[1:]

@@ -149,7 +149,7 @@ class Clone(BaseEffect):
 
 if __name__ == "__main__":
 
-    #Clone("97228449563405973")
+    #Clone("4092400594849537353")
     # Ensure at least one argument is passed
     if len(sys.argv) < 2:
         print("Please provide an ID as a command-line argument.")
