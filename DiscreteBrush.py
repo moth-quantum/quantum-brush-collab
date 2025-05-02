@@ -1,3 +1,5 @@
+from copy import copy
+
 import pygame
 import numpy as np
 import pickle
@@ -72,7 +74,11 @@ class DiscreteBrush:
         mask = np.zeros(alpha_array.shape, dtype=np.uint8)
         path = rescale_coordinates(canvas.image_rect, self.brush_path)
 
-        for x,y in path:
+        mask_path = copy(path)
+        if effect == "Heisenbrush":
+            mask_path = interpolate_pixels(mask_path)
+
+        for x,y in mask_path:
             mask = apply_circle(mask,x,y,radius)
 
         # Crop the mask

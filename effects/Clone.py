@@ -3,7 +3,6 @@ import os
 import numpy as np
 from qiskit.circuit.library import RXGate, RZGate,XGate,ZGate,IGate,StatePreparation
 from qiskit.circuit.library import UnitaryGate
-from qiskit.pulse import num_qubits
 from qiskit.circuit.library import RealAmplitudes
 from qiskit.quantum_info import SparsePauliOp
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
