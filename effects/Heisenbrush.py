@@ -198,7 +198,7 @@ class Heisenbrush(BaseEffect):
 
     def run_hardware(self,dt_list):
         # Backend
-        estimator = Estimator(backend) +43
+        estimator = Estimator(backend)
 
         nsteps = len(dt_list)
         #Hardcoding all the parameters for now
@@ -256,6 +256,8 @@ class Heisenbrush(BaseEffect):
         distances = self.strength * np.array(distances)/max(distances)
         #Run the algorithm to obtain the new colors
         new_colors = self.run_hardware(distances)
+
+        print("New colors: ", new_colors,flush=True)
 
         #Apply the new colors directly onto the new image:
         self.new_image = self.image + 0
