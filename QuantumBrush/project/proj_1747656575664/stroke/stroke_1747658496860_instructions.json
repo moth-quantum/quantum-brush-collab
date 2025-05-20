@@ -1,0 +1,164 @@
+{
+  "effect_success": "true",
+  "project_id": "proj_1747656575664",
+  "user_input": {
+    "Radius": "4",
+    "Color": "#ff2c00",
+    "Alpha": "0.3",
+    "Color2": "#ff5800"
+  },
+  "layered_output_location": "project/proj_1747656575664/original_stroke_1747658496860.png",
+  "created": true,
+  "processing_status": "completed",
+  "stroke_input": {
+    "path": [
+      [
+        161,
+        55
+      ],
+      [
+        161,
+        55
+      ],
+      [
+        161,
+        55
+      ],
+      [
+        162,
+        55
+      ],
+      [
+        166,
+        54
+      ],
+      [
+        169,
+        52
+      ],
+      [
+        172,
+        51
+      ],
+      [
+        176,
+        49
+      ],
+      [
+        179,
+        48
+      ],
+      [
+        181,
+        47
+      ],
+      [
+        183,
+        46
+      ],
+      [
+        184,
+        45
+      ],
+      [
+        185,
+        45
+      ],
+      [
+        186,
+        45
+      ],
+      [
+        187,
+        44
+      ],
+      [
+        188,
+        44
+      ],
+      [
+        189,
+        44
+      ],
+      [
+        190,
+        44
+      ],
+      [
+        190,
+        44
+      ],
+      [
+        191,
+        44
+      ],
+      [
+        192,
+        44
+      ],
+      [
+        193,
+        44
+      ],
+      [
+        194,
+        44
+      ],
+      [
+        195,
+        44
+      ],
+      [
+        196,
+        44
+      ],
+      [
+        197,
+        44
+      ],
+      [
+        198,
+        44
+      ],
+      [
+        198,
+        44
+      ],
+      [
+        198,
+        44
+      ],
+      [
+        198,
+        44
+      ],
+      [
+        198,
+        45
+      ],
+      [
+        198,
+        45
+      ],
+      [
+        198,
+        45
+      ],
+      [
+        198,
+        45
+      ]
+    ],
+    "input_location": "project/proj_1747656575664/stroke/stroke_1747658496860_input.png",
+    "real_hardware": false,
+    "clicks": [[
+      161,
+      55
+    ]],
+    "output_location": "project/proj_1747656575664/stroke/stroke_1747658496860_output.png"
+  },
+  "stroke_id": "stroke_1747658496860",
+  "effect_received": "true",
+  "effect_processed": "true",
+  "effect_id": "acrylic"
+}

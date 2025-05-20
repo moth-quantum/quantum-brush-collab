@@ -1,0 +1,23 @@
+{
+    "name": "Acrylic Brush",
+    "id": "acrylic", 
+    "author": "MOTH",
+    "version": "1.0.0",
+    "description": "A simple brush that works just like a classical paint with a controlable alpha channel.",
+    "dependencies": {
+        "numpy": ">=2.1.0"
+    },
+    "user_input": {
+        "Radius": "int",
+        "Alpha": "float",
+        "Color": "color",
+        "Color2": "color"
+    },
+    "stroke_input": {
+        "image_rgba": "array",
+        "path": "array"
+    },
+    "flags": {
+        "smooth": true
+    }
+}

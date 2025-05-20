@@ -1,0 +1,288 @@
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 180, in <module>
+    success = apply_effect(data)
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 126, in apply_effect
+    new_image = effect_module.run(req)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/../effect/acrylic/acrylic.py", line 14, in run
+    wait(10)
+TypeError: posix.wait() takes no arguments (1 given)
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 180, in <module>
+    success = apply_effect(data)
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 126, in apply_effect
+    new_image = effect_module.run(req)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/../effect/acrylic/acrylic.py", line 14, in run
+    wait(10)
+TypeError: posix.wait() takes no arguments (1 given)
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 180, in <module>
+    success = apply_effect(data)
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 126, in apply_effect
+    new_image = effect_module.run(req)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/../effect/acrylic/acrylic.py", line 14, in run
+    wait(10)
+TypeError: posix.wait() takes no arguments (1 given)
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 180, in <module>
+    success = apply_effect(data)
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 126, in apply_effect
+    new_image = effect_module.run(req)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/../effect/acrylic/acrylic.py", line 14, in run
+    wait(10)
+TypeError: posix.wait() takes no arguments (1 given)
+
+Failed to apply effect.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 206, in <module>
+    success = apply_effect(data)
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 131, in apply_effect
+    new_image = effect_module.run(req)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/../effect/acrylic/acrylic.py", line 37, in run
+    image[min_x:max_x, min_y:max_y, 3] = int(params["user_input"]["Alpha"] * 255)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OverflowError: Python integer 2550 out of bounds for uint8
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 206, in <module>
+    success = apply_effect(data)
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 131, in apply_effect
+    new_image = effect_module.run(req)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/../effect/acrylic/acrylic.py", line 37, in run
+    image[min_x:max_x, min_y:max_y, 3] = int(params["user_input"]["Alpha"] * 255)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OverflowError: Python integer 2550 out of bounds for uint8
+
+Failed to apply effect.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '0.8'
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '0.8'
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '0.8'
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '0.8'
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '0.8'
+
+Failed to apply effect.
+Effect applied successfully.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '0.8'
+
+Failed to apply effect.
+Effect applied successfully.
+Effect applied successfully.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'int'
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'int'
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '0.8'
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '0.8'
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 24, in process_variable
+    return int(variable)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'int'
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 200, in <module>
+    data = process_effect(instructions)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 108, in process_effect
+    req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/astrydpark/eclipse-workspace/QuantumBrush/effect/apply_effect.py", line 22, in process_variable
+    return float(variable)
+           ^^^^^^^^^^^^^^^
+ValueError: could not convert string to float: 'float'
+
+Failed to apply effect.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Effect applied successfully.
+Traceback (most recent call last):
+  File "/Users/jsf/Documents/QuantumBrush/QuantumBrush/effect/apply_effect.py", line 206, in <module>
+    success = apply_effect(data)
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/jsf/Documents/QuantumBrush/QuantumBrush/effect/apply_effect.py", line 131, in apply_effect
+    new_image = effect_module.run(req)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jsf/Documents/QuantumBrush/QuantumBrush/effect/../effect/acrylic/acrylic.py", line 37, in run
+    image[min_x:max_x, min_y:max_y, 3] = int(params["user_input"]["Alpha"] * 255)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OverflowError: Python integer 2295 out of bounds for uint8
+
+Failed to apply effect.
+Traceback (most recent call last):
+  File "/Users/jsf/Documents/QuantumBrush/QuantumBrush/effect/apply_effect.py", line 206, in <module>
+    success = apply_effect(data)
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/jsf/Documents/QuantumBrush/QuantumBrush/effect/apply_effect.py", line 131, in apply_effect
+    new_image = effect_module.run(req)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jsf/Documents/QuantumBrush/QuantumBrush/effect/../effect/acrylic/acrylic.py", line 37, in run
+    image[min_x:max_x, min_y:max_y, 3] = int(params["user_input"]["Alpha"] * 255)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OverflowError: Python integer 1530 out of bounds for uint8
+
+Failed to apply effect.
+Effect applied successfully.

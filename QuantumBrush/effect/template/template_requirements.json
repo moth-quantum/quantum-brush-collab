@@ -1,0 +1,23 @@
+{
+    "name": "Super cool effect",
+    "id": "id_without_spaces", 
+    "author": "creator",
+    "version": "1.0.0",
+    "description": "Small description of the effect.",
+    "dependencies": {
+        "numpy": ">=2.1.0"
+    },
+    "user_input": {
+        "Radius": "int",
+        "Strenght": "float",
+        "Color": "color"
+    },
+    "stroke_input": {
+        "image_rgba": "array",
+        "path": "array",
+        "clicks": "array"
+    },
+    "flags": {
+        "smooth": true
+    }
+}
