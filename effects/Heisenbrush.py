@@ -3,6 +3,7 @@ import os
 import numpy as np
 from BaseEffect import BaseEffect
 import sys
+import colorsys
 from utils import *
 from qiskit.quantum_info import Statevector, Pauli, SparsePauliOp
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, generate_preset_pass_manager
@@ -75,6 +76,48 @@ class Heisenbrush(BaseEffect):
             rgb_colors.append((r, g, b))
 
         return rgb_colors
+
+
+    def numbers_to_hsl(self,values, satur=70, lightn=50):
+        """
+        Converts a list of values in the range [1, 99] to corresponding HSL color strings.
+
+        Parameters:
+        - values: List[int] - List of float numbers between 0 and 1
+        - satur: int - Saturation (0 to 100)
+        - lightn: int - Lightness (0 to 100)
+
+        Returns:
+        - List[str]: HSL color
+        """
+        hsl_colors = []
+        for num in values:
+            # Ensure number is between 0 and 1
+            num = max(0, min(1, num))
+
+            # Remove the leading '0.' and pad with zeros to ensure at least 6 digits
+            # For example, 0.567742 becomes '567742'
+            digits = str(num).replace('0.', '').ljust(2, '0')
+
+            # Extract first 2 digits for H
+            h_str = int(digits[0:2])
+
+            # Normalize to [0, 360)
+            hue = (h_str - 1) / 98 * 360
+            hsl_colors.append((hue,satur,lightn))
+
+            rgb_255_list = []
+            #Transform hsl into rgb
+            for h, s, l in hsl_colors:
+                h_norm = h / 360.0
+                s_norm = s / 100.0
+                l_norm = l / 100.0
+                r, g, b = colorsys.hls_to_rgb(h_norm, l_norm, s_norm)
+                rgb_255 = (int(round(r * 255)), int(round(g * 255)), int(round(b * 255)))
+                rgb_255_list.append(rgb_255)
+
+        return rgb_255_list
+
 
     def create_heisenberg_hamiltonian(self,n_qubits:int, J_list: list, hz_list:list, hx_list:list):
         """
@@ -240,8 +283,9 @@ class Heisenbrush(BaseEffect):
 
         values=np.abs((np.array(values)/sum(np.array(values))))
 
-        # Normalize RGB values to [0, 1]
-        return self.numbers_to_rgb_colors(values)
+        # return self.numbers_to_rgb_colors(values)
+        return self.numbers_to_hsl(values)
+
 
 
     def apply(self):
