@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="30ef5aec-57da-4f27-b9b8-3db1756ed900" name="Changes" comment="Updated brush so that the erro message of effects is visible" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/main" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="d00150a601d802c7412166f024fd54c15352c730" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;quantumjoao&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/quantumjoao/QuantumBrush.git&quot;,
+    &quot;accountId&quot;: &quot;f2618a2b-0b8e-4a0e-bf6f-9032bb9a5bd6&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2sDK0NYl9bD8XYeILcmyHZmQccG" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Basic.executor": "Run",
+    "Python.Clone.executor": "Run",
+    "Python.DiscreteBrush.executor": "Debug",
+    "Python.Drop.executor": "Run",
+    "Python.Heisenbrush.executor": "Run",
+    "Python.Heisy.executor": "Run",
+    "Python.Mixing.executor": "Run",
+    "Python.QuantumBlur.executor": "Run",
+    "Python.QuantumBlurClever.executor": "Run",
+    "Python.RemoveAlpha.executor": "Run",
+    "Python.app.executor": "Run",
+    "Python.brush.executor": "Run",
+    "Python.config.executor": "Run",
+    "Python.editor.executor": "Run",
+    "Python.mixbox.executor": "Debug",
+    "Python.q.executor": "Run",
+    "Python.qb.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/jsf/Documents/QuantumBrush/effects",
+    "settings.editor.selected.configurable": "com.intellij.pycharm.community.ide.impl.configuration.PythonContentEntriesConfigurable"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "TEXT"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/effects" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/images" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.app">
+    <configuration name="Clone" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="QuantumBrush" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (.venv)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/effects/Clone.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Drop" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="QuantumBrush" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/effects/Drop.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Heisy" type="PythonConfigurationType" factoryName="Python">
+      <module name="QuantumBrush" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (.venv)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/effects/Heisenbrush.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="app" type="PythonConfigurationType" factoryName="Python">
+      <module name="QuantumBrush" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (.venv)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/editor.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.app" />
+      <item itemvalue="Python.Clone" />
+      <item itemvalue="Python.Heisy" />
+      <item itemvalue="Python.Drop" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.Drop" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-fb887030ada0-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.21565.199" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="30ef5aec-57da-4f27-b9b8-3db1756ed900" name="Changes" comment="" />
+      <created>1737984482067</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1737984482067</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Added simple brush mechanism">
+      <option name="closed" value="true" />
+      <created>1737989692309</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1737989692309</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added temporary folder to allow for bigger segments">
+      <option name="closed" value="true" />
+      <created>1737997168884</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1737997168884</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Changed file structure">
+      <option name="closed" value="true" />
+      <created>1738059336821</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1738059336821</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Updated README">
+      <option name="closed" value="true" />
+      <created>1738059591222</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1738059591222</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Re-did structure (has bugs)">
+      <option name="closed" value="true" />
+      <created>1738268733832</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1738268733832</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Re-organized the buttons">
+      <option name="closed" value="true" />
+      <created>1738340701127</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1738340701127</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Fixed click not being detected">
+      <option name="closed" value="true" />
+      <created>1738576333489</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1738576333489</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added QB strip and redid the brush">
+      <option name="closed" value="true" />
+      <created>1738585094029</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1738585094029</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Fixed QuantumBlur and added different input options">
+      <option name="closed" value="true" />
+      <created>1738600560925</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1738600560925</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added export option">
+      <option name="closed" value="true" />
+      <created>1738600898870</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1738600898870</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Added type check for buttons">
+      <option name="closed" value="true" />
+      <created>1738602047798</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1738602047798</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Added type check for brush , effect anda canvas">
+      <option name="closed" value="true" />
+      <created>1738658307422</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1738658307422</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added missing files and folders">
+      <option name="closed" value="true" />
+      <created>1739277228253</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1739277228253</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Added missing temp folder">
+      <option name="closed" value="true" />
+      <created>1739277547035</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1739277547035</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Added missing temp folder">
+      <option name="closed" value="true" />
+      <created>1739277669806</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1739277669806</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Fixed directory issue">
+      <option name="closed" value="true" />
+      <created>1739437545703</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1739437545703</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Small color update">
+      <option name="closed" value="true" />
+      <created>1739463613611</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1739463613611</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Re-did quantum blur for faster run">
+      <option name="closed" value="true" />
+      <created>1739524519235</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1739524519235</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Increased FPS">
+      <option name="closed" value="true" />
+      <created>1739525110055</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1739525110055</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Added orientation to QB">
+      <option name="closed" value="true" />
+      <created>1739545600997</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1739545600997</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Smoother and faster QB">
+      <option name="closed" value="true" />
+      <created>1739548891330</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1739548891330</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Now stregth zero gives a null effect">
+      <option name="closed" value="true" />
+      <created>1739550571417</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1739550571417</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Added tiger">
+      <option name="closed" value="true" />
+      <created>1739786454120</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1739786454120</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Added QB updates from James">
+      <option name="closed" value="true" />
+      <created>1739786487979</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1739786487979</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Fix error that would break down the program when brush outside scope">
+      <option name="closed" value="true" />
+      <created>1739786527906</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1739786527906</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Added back a discrete brush">
+      <option name="closed" value="true" />
+      <created>1741771673563</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1741771673563</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Added clone effect">
+      <option name="closed" value="true" />
+      <created>1741771738245</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1741771738245</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Changed clone to act on the SVD values">
+      <option name="closed" value="true" />
+      <created>1741858079261</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1741858079261</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Added color mixing effect">
+      <option name="closed" value="true" />
+      <created>1741947212153</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1741947212153</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Fixed a bug when changing effects">
+      <option name="closed" value="true" />
+      <created>1742229242088</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1742229242088</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Small improvements of the base code">
+      <option name="closed" value="true" />
+      <created>1742229285221</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1742229285221</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Added function to compute Z expectation values">
+      <option name="closed" value="true" />
+      <created>1742299452158</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1742299452158</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Added instructions">
+      <option name="closed" value="true" />
+      <created>1742299462098</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1742299462098</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Added Drop effect (working)">
+      <option name="closed" value="true" />
+      <created>1742299481001</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1742299481001</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Small changes">
+      <option name="closed" value="true" />
+      <created>1742299683830</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1742299683830</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Updated clone">
+      <option name="closed" value="true" />
+      <created>1742897580998</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1742897580998</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Updated drop effect">
+      <option name="closed" value="true" />
+      <created>1746176984791</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1746176984791</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Fixed the heisenbrush">
+      <option name="closed" value="true" />
+      <created>1746190255498</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1746190255498</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Made the discrete brush compatible with heisenbrush">
+      <option name="closed" value="true" />
+      <created>1746193265053</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1746193265053</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Updated brush so that the erro message of effects is visible">
+      <option name="closed" value="true" />
+      <created>1746195083203</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1746195083203</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Fixed directory issue" />
+    <MESSAGE value="Small color update" />
+    <MESSAGE value="Re-did quantum blur for faster run" />
+    <MESSAGE value="Increased FPS" />
+    <MESSAGE value="Added orientation to QB" />
+    <MESSAGE value="Smoother and faster QB" />
+    <MESSAGE value="Now stregth zero gives a null effect" />
+    <MESSAGE value="Added tiger" />
+    <MESSAGE value="Added QB updates from James" />
+    <MESSAGE value="Fix error that would break down the program when brush outside scope" />
+    <MESSAGE value="Added back a discrete brush" />
+    <MESSAGE value="Added clone effect" />
+    <MESSAGE value="Changed clone to act on the SVD values" />
+    <MESSAGE value="Added color mixing effect" />
+    <MESSAGE value="Fixed a bug when changing effects" />
+    <MESSAGE value="Small improvements of the base code" />
+    <MESSAGE value="Added function to compute Z expectation values" />
+    <MESSAGE value="Added instructions" />
+    <MESSAGE value="Added Drop effect (working)" />
+    <MESSAGE value="Small changes" />
+    <MESSAGE value="Updated clone" />
+    <MESSAGE value="Updated drop effect" />
+    <MESSAGE value="Fixed the heisenbrush" />
+    <MESSAGE value="Made the discrete brush compatible with heisenbrush" />
+    <MESSAGE value="Updated brush so that the erro message of effects is visible" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated brush so that the erro message of effects is visible" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/DiscreteBrush.py</url>
+          <line>117</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/editor.py</url>
+          <line>164</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/editor.py</url>
+          <line>279</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
