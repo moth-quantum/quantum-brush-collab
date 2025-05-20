@@ -12,6 +12,7 @@ import argparse
 import os
 import time
 from utils import *
+import contextlib
 
 app_path = Path(sys.path[0] + "/..") # Path to the app folder
 
@@ -175,15 +176,31 @@ def dump_json(data, file_path):
         with open(file_path, "w") as f:
             json.dump(data, f)
 
+class Tee:
+    def __init__(self, *files):
+        self.files = files
+    def write(self, obj):
+        for f in self.files:
+            f.write(obj)
+            f.flush()
+    def flush(self):
+        for f in self.files:
+            f.flush()
+
+
 if __name__ == "__main__":
+    
+    log_output_file = app_path / "log/console_output.log"
+    log_output_file.parent.mkdir(parents=True, exist_ok=True)
+    log_fh = open(log_output_file, "a")
+
+    sys.stdout = Tee(sys.stdout, log_fh)
+    sys.stderr = Tee(sys.stderr, log_fh)
     
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Apply an effect to a stroke in a project.")
     parser.add_argument("stroke_path", type=str, help="The ID of the stroke.")
     args = parser.parse_args()
-
-    log_file = app_path / "log/error.log"
-    log_file.parent.mkdir(parents=True, exist_ok=True)  # Ensure log directory exists
 
     success = False
     instructions = {}
@@ -230,7 +247,9 @@ if __name__ == "__main__":
             instructions["effect_success"] = False
             dump_json(instructions, args.stroke_path)
         success = False
+        # Redirect stdout and stderr to a log file
 
+    
     if success:
         print("Effect applied successfully.")
         sys.exit(0)
