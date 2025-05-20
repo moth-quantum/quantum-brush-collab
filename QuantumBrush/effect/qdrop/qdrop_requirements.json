@@ -1,16 +1,18 @@
 {
-    "name": "Super cool effect",
-    "id": "id_without_spaces", 
-    "author": "creator",
+    "name": "Quantum Drops",
+    "id": "qdrop", 
+    "author": "Joao",
     "version": "1.0.0",
-    "description": "Small description of the effect.",
+    "description": "Paint with quantum drops",
     "dependencies": {
         "numpy": ">=2.1.0",
         "colorsys": ""
     },
     "user_input": {
-        "Drops": "int",
-        "Target color": "color"
+        "Number of Drops": "int",
+        "Radius": "int",
+        "Target color": "color",
+        "Strength": "float"
     },
     "stroke_input": {
         "image_rgba": "array",

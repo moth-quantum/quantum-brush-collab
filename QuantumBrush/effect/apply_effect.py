@@ -92,10 +92,6 @@ def process_effect(instr: dict):
     with Image.open(image_path) as img:
         req["stroke_input"]["image_rgba"] = np.array(img.convert("RGBA")) # Ensure the image is in RGBA format
 
-    # Process the path and clicks
-
-    req["stroke_input"]["path"] = req["stroke_input"]["path"][:, [1, 0]]
-    req["stroke_input"]["clicks"] = req["stroke_input"]["clicks"][:, [1, 0]]
 
     # Process user_input and stroke_input
     for input_type in ["user_input", "stroke_input"]:
@@ -108,9 +104,14 @@ def process_effect(instr: dict):
             
             req[input_type][key] = process_variable(req[input_type][key], instr[input_type][key])
 
+    # Process the path and clicks
+
+    req["stroke_input"]["path"] = req["stroke_input"]["path"][..., ::-1]
+    req["stroke_input"]["clicks"] = req["stroke_input"]["clicks"][..., ::-1]
+
     # Process any other flags
-        
-    if "smooth" in req["flags"]:
+    
+    if req["flags"].get("smooth_path", False):
         req["path"] = interpolate_pixels(req["stroke_input"]["path"], numpy=True)
 
 
