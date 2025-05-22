@@ -11,7 +11,7 @@
     "user_input": {
         "Number of Drops": "int",
         "Radius": "int",
-        "Target color": "color",
+        "Target Color": "color",
         "Strength": "float"
     },
     "stroke_input": {
